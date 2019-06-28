@@ -1,0 +1,11 @@
+library(bibliometrix)
+D <- readFiles("source.bib")
+D
+M <- convert2df(D, dbsource = "isi", format = "bibtex")
+View(M)
+results <- biblioAnalysis(M, sep = ";")
+S <- summary(object = results, k = 10, pause = FALSE)
+plot(x = results, k = 10, pause = FALSE)
+NetMatrix <- biblioNetwork(M, analysis = "co-citation", network = "references", sep = ". ")
+devtools::install_github("massimoaria/bibliometrix")
+bibliometrix::biblioshiny()

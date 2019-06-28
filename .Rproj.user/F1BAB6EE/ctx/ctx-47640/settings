@@ -1,0 +1,8 @@
+packrat_mode_on="0"
+r.session.client_metrics.build-console-width="60"
+r.session.client_metrics.console-width="59"
+r.session.client_metrics.device-pixel-ratio="1.000000"
+r.session.client_metrics.graphics-height="384"
+r.session.client_metrics.graphics-width="675"
+r_profile_on_restore="0"
+working_directory="/Library/Frameworks/R.framework/Versions/3.5/Resources/library/bibliometrix/biblioshiny"
