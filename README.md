@@ -3,14 +3,14 @@
 
 ### Tools for the data extraction process
 
-1. Install zotero (https://www.zotero.org/)
-2. Install better-bibtex plugin into zotero (http://retorque.re/zotero-better-bibtex/)
-3. Install zotfile plugin into zotero (http://zotfile.com/)
+1. Install zotero desktop ([https://www.zotero.org/download/](https://www.zotero.org/download/))
+2. Install better-bibtex plugin into zotero ([http://retorque.re/zotero-better-bibtex/](http://retorque.re/zotero-better-bibtex/))
+3. Install zotfile plugin into zotero ([http://zotfile.com/](http://zotfile.com/))
 
 
 ### Data extraction process using zotero
 
-To participate in the data extraction process register as member of the group "systematic_literature_review_of_gamification" in the website of zotero through the URL: https://www.zotero.org/groups/2366342/systematic_literature_review_of_gamification
+To participate in the data extraction process register as member of the group "systematic_literature_review_of_gamification" in the website of zotero through the URL: [https://www.zotero.org/groups/2366342/systematic_literature_review_of_gamification](https://www.zotero.org/groups/2366342/systematic_literature_review_of_gamification)
 
 1. Open the PDF file attached to the item of zotero in the group library using your favorite PDF editor (e.g. Acrobat PDF reader, PDF Foxit, Master PDF)
 
