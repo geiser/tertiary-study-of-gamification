@@ -55,9 +55,13 @@ In general from the Method section, the following data may be extracted:
 | Exclusion criteria | List of exclusion criteria as was explicitly indicated by the paper's authors |
 | Inclusion criteria | List of inclusion criteria as was explicitly indicated by the paper's authors |
 | Selection procedure | Selection procedure of studies as was explicitly indicated by the paper's authors |
-| Quality assessment criteria | Criteria for quality assessment as was explicitly indicated in the review |
-| Quality assessment procedure | Quality assessment procedure as was explicitly indicated in the review |
-| Preventive steps to minimize bias and errors in the quality assessment | Steps taken to avoid bias in the quality assessemnt as was explicitly indicate by the author (frequently indicated in the "Limitation" or "Validity Evaluation") |
+| Quality assessment criteria | Criteria for quality assessment as was explicitly indicated by the authors in the article |
+| Quality assessment procedure | Quality assessment procedure as was explicitly indicated by the authors in the article |
+| Preventive steps to minimize bias and errors in the quality assessment | Steps taken to avoid bias in the quality assessemnt as was explicitly indicate by the author in the paper (frequently indicated in the "Limitation" or "Validity Evaluation") |
+| Data extraction form | Form used during the data extraction process as was explicitly indicated by the authors in the review (mention only the fields and reference to this form) |
+| Data extraction process | Data extraction procedure as was explicitly indicated in the review |
+| Preventive steps to minimize bias and errors in the data extraction process | Steps taken to avoid bias in the Data extraction process as was explicitly indicate by the author in the paper (frequently indicated in the "Limitation" or "Validity Evaluation") |
+
 
 In general from the Results and Discussion sections, the following data may be extracted:
  
