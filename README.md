@@ -1,14 +1,17 @@
 # tertiary-study-of-gamification
 
+* [Tools for the data extraction process](#tools-for-the-data-extraction-process)
+* [Data extraction process using zotero](#data-extraction-process-using-zotero)
+* [Validation of extracted data using zotero](#validation-of-extracted-data-using-zotero)
 
-### Tools for the data extraction process
+## Tools for the data extraction process
 
 1. Install zotero desktop ([https://www.zotero.org/download/](https://www.zotero.org/download/))
 2. Install better-bibtex plugin into zotero ([http://retorque.re/zotero-better-bibtex/](http://retorque.re/zotero-better-bibtex/))
 3. Install zotfile plugin into zotero ([http://zotfile.com/](http://zotfile.com/))
 
 
-### Data extraction process using zotero
+## Data extraction process using zotero
 
 To participate in the data extraction process register as member of the group "systematic_literature_review_of_gamification" in the website of zotero through the URL: [https://www.zotero.org/groups/2366342/systematic_literature_review_of_gamification](https://www.zotero.org/groups/2366342/systematic_literature_review_of_gamification)
 
@@ -81,7 +84,7 @@ From the Discussion and Conclusion sections, the following data may be extracted
 | Research agenda | Some literature reviews indicate a research questions or issues that the authors suggest to explore in a near future |
 
 
-### Validation of extracted data using zotero
+## Validation of extracted data using zotero
 
 To validate the extracted data, You only as _second reviewer_ need to open the PDF-file of the article, and to validate the annotations making by the _main reviewer_ (_reviewer assigned to the data extraction_). If you notice troubles or you have suggestions, you should create a new note that begins with the text "Validation:" as shown in the figures below.
 
