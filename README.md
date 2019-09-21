@@ -80,3 +80,17 @@ From the Discussion and Conclusion sections, the following data may be extracted
 | Practitioner guideline | Some literature review at the discussion and conclusions indicated guidelines to practitioner about gamification based on the evidences found in the selected studies. Such as, "based on ...., we suggest that educators/designers/developers should be .... " | 
 | Research agenda | Some literature reviews indicate a research questions or issues that the authors suggest to explore in a near future |
 
+
+### Validation of extracted data using zotero
+
+To validate the extracted data, You only as _second reviewer_ need to open the PDF-file of the article, and to validate the annotations making by the _main reviewer_ (_reviewer assigned to the data extraction_). If you notice troubles or you have suggestions, you should create a new note that begins with the text "Validation:" as shown in the figures below.
+
+
+![Conver the annotation into notes](figs/04screenshot.png)
+![Note of Validation](figs/05screenshot.png)
+
+After the validation, the _main reviewer_ can solve and accept the troubles and suggestion pointed by the _second reviewer_.
+If there is a disagreement between the _main reviewer_ and _second reviewer_, a _third review_ will be assigned to solve the disagreement at the end of the data extraction process.
+
+
+
