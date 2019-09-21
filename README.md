@@ -92,8 +92,8 @@ To validate the extracted data, You only as _second reviewer_ need to open the P
 ![Conver the annotation into notes](figs/04screenshot.png)
 ![Note of Validation](figs/05screenshot.png)
 
-After the validation, the _main reviewer_ can solve and accept the troubles and suggestion pointed by the _second reviewer_.
-If there is a disagreement between the _main reviewer_ and _second reviewer_, a _third review_ will be assigned to solve the disagreement at the end of the data extraction process.
+After the validation, the _main reviewer_ can solve the troubles and/or accept the suggestion pointed by the _second reviewer_.
+If there is a disagreement between the _main reviewer_ and _second reviewer_, a _third reviewer_ will be assigned to solve the disagreement at the end of the data extraction process.
 
 
 
