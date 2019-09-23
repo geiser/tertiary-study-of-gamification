@@ -4,6 +4,9 @@
 * [Data extraction process using zotero](#data-extraction-process-using-zotero)
 * [Validation of extracted data using zotero](#validation-of-extracted-data-using-zotero)
 
+
+To install a plugin in Zotero, download its .xpi file to your computer. Then, in Zotero, click “Tools → Add-Ons”, then drag the .xpi for the plugin onto the Add-Ons window that opens
+
 ## Tools for the data extraction process
 
 1. Install zotero desktop ([https://www.zotero.org/download/](https://www.zotero.org/download/))
