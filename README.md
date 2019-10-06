@@ -1,9 +1,13 @@
-# tertiary-study-of-gamification
+# Summary of the tertiary review on gamification
+
+* [Data extraction phase](#data-extraction-phase)
+* [Data analysis phase](#data-analysis-phase)
+
+# Data extraction phase
 
 * [Tools for the data extraction process](#tools-for-the-data-extraction-process)
 * [Data extraction process using zotero](#data-extraction-process-using-zotero)
 * [Validation of extracted data using zotero](#validation-of-extracted-data-using-zotero)
-
 
 To install a plugin in Zotero, download its .xpi file to your computer. Then, in Zotero, click “Tools → Add-Ons”, then drag the .xpi for the plugin onto the Add-Ons window that opens
 
@@ -99,4 +103,39 @@ After the validation, the _main reviewer_ can solve the troubles and/or accept t
 If there is a disagreement between the _main reviewer_ and _second reviewer_, a _third reviewer_ will be assigned to solve the disagreement at the end of the data extraction process.
 
 
+# Data analysis phase
+
+The data analysis is carried out through quantitative and qualitative methods.
+
+In the following sections, each section describes one method used in our tertiary review  
+
+* [Tools for the data extraction process](#tools-for-the-data-extraction-process)
+* [Data extraction process using zotero](#data-extraction-process-using-zotero)
+* [Validation of extracted data using zotero](#validation-of-extracted-data-using-zotero)
+
+
+## Method: Classification schemes (qualitative method)
+
+A classification scheme is used to group the extracted data based on the common characteristics of them.
+
+* Tool: Mindomo ([https://www.mindomo.com](https://www.mindomo.com))
+ 
+Some information may fall in more than one category. Therefore, when the data extracted fall in more than one category, the icon with the number will be used to indicate that the information fall in more than one category. As example, in the figure below, we shows that the information "Gamification for waste management and gamification for schoolchildren" extracted from the litetarture review "A review of the applicability of gamification and game-based learning to improve household-level waste management practices among schoolchildrens" fall in the two categories: (1) "education", and (2) "environment and society".
+
+![example-fall-in-two-categories01](figs/06screenshot.png)
+![example-fall-in-two-categories01](figs/07screenshot.png)
+
+We built the following classification schemes: 
+
+1. Classification of literature reviews by type
+  * Purpose: Identify the types of review on gamification.
+  * URL: [https://www.mindomo.com/mindmap/classification-by-review-types-c5761495660e44f78c98868ea16e087f](https://www.mindomo.com/mindmap/classification-by-review-types-c5761495660e44f78c98868ea16e087f)
+  * Responsable to classify: geiser@usp.br, diego.matos@famed.ufal.br  
+  * Responable to validate: anyone
+  
+2. Classification of literature reviews by contexts
+  * Purpose: Identify the contexts in which gamification was framed for the literature review.
+  * URL: [https://www.mindomo.com/mindmap/classification-of-reviews-by-context-fe0a4a1a13a6493eb46d1d4b407794f2](https://www.mindomo.com/mindmap/classification-of-reviews-by-context-fe0a4a1a13a6493eb46d1d4b407794f2)
+  * Responsable to classify: geiser@usp.br, diego.matos@famed.ufal.br  
+  * Responable to validate: anyone
 
