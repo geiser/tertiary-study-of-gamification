@@ -130,12 +130,25 @@ We built the following classification schemes:
 1. Classification of literature reviews by type
   * Purpose: Identify the types of review on gamification.
   * URL: [https://www.mindomo.com/mindmap/classification-by-review-types-c5761495660e44f78c98868ea16e087f](https://www.mindomo.com/mindmap/classification-by-review-types-c5761495660e44f78c98868ea16e087f)
-  * Responsable to classify: geiser@usp.br, diego.matos@famed.ufal.br  
-  * Responable to validate: anyone
+  * Responsable researcher to classify: geiser@usp.br 
+  * Responsable researcher to validate: diego.matos@famed.ufal.br
   
 2. Classification of literature reviews by contexts
   * Purpose: Identify the contexts in which gamification was framed for the literature review.
   * URL: [https://www.mindomo.com/mindmap/classification-of-reviews-by-context-fe0a4a1a13a6493eb46d1d4b407794f2](https://www.mindomo.com/mindmap/classification-of-reviews-by-context-fe0a4a1a13a6493eb46d1d4b407794f2)
-  * Responsable to classify: geiser@usp.br, diego.matos@famed.ufal.br  
-  * Responable to validate: anyone
+  * Responsable researcher to classify: geiser@usp.br
+  * Responsable researcher to validate: diego.matos@famed.ufal.br
+  
+3. Classification of review objectives on gamification:
+  * Purpose: Identify the review objectives explored by the literature reviews on gamification.
+  * URL: [https://www.mindomo.com/mindmap/ddfbaf40dcf94d9399c70571a0fbfd99](https://www.mindomo.com/mindmap/ddfbaf40dcf94d9399c70571a0fbfd99)
+  * Responsable researcher to classify: 
+  * Responsable researcher to validate: 
+  
+4. Classification of research questions on gamification:
+  * Purpose: Identify the research questions explored by the literature reviews on gamification.
+  * URL: [https://www.mindomo.com/mindmap/a124fd6451ec4e39949b997e9fa63283](https://www.mindomo.com/mindmap/a124fd6451ec4e39949b997e9fa63283)
+  * Responsable researcher to classify: 
+  * Responsable researcher to validate: 
 
+  
