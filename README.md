@@ -133,11 +133,11 @@ We built the following classification schemes:
   |-------------|-------------|
   | Structured Narrative Review | Close similar to a traditional review because may have bies. Its extraction processes may be unclear, may not include qualitative analysis or not use classification as methods of data synthesis (such as voting, counting or other) |
   | Descriptive or Mapping Review | Review that includes clear selection and data extraction process. A qualitative assessment is not carried out, and the data analysis is based on the interpretation of each selected study as a unit in the whole  published literature | 
-  | Scoping Review |  |
-  | Critical Review |  |
-  | Realistic Review |  |
-  | Systematic Review (Aggregative Review) |  |
-  | Meta-analysis (Aggregative Review) |  |
+  | Scoping Review | Review that includes clear selection and data extraction process. Close similar to structure narrative review or descriptive/mapping review, but it includes gray literature. |
+  | Critical Review | A review that includes evaluation and an interpretive analysis of existing literature on a particular topic of interest to reveal strengths, weaknesses, contradictions, controversies, inconsistencies, and/or other important issues with respect to theories, hypotheses, research methods and/or empirical results. |
+  | Realistic Review | Review based on a theoretical model/framework in which the data is structured according to this framework/model to find out whether, where and how it is applicable. |
+  | Systematic Review (Aggregative Review) | Review that uses qualitative assessment to synthetize and to analyze the extracted data from primary studies. |
+  | Meta-analysis (Aggregative Review) | In adittion to a qualitative assessment of primary studies, a meta-analysis includes statistical analysis on effect sizes to combine the results of independent studies, and to find significant differences. |
   
 2. Classification of literature reviews by contexts
   * Purpose: Identify the contexts in which gamification was framed for the literature review.
