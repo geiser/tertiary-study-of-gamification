@@ -105,14 +105,9 @@ If there is a disagreement between the _main reviewer_ and _second reviewer_, a 
 
 # Data analysis phase
 
-The data analysis is carried out through quantitative and qualitative methods.
+The data analysis is carried out through quantitative and qualitative methods. These methods are:
 
-In the following sections, each section describes one method used in our tertiary review  
-
-* [Tools for the data extraction process](#tools-for-the-data-extraction-process)
-* [Data extraction process using zotero](#data-extraction-process-using-zotero)
-* [Validation of extracted data using zotero](#validation-of-extracted-data-using-zotero)
-
+* [Method: Classification schemes (qualitative method)](#method:-classification-schemes-(qualitative-method))
 
 ## Method: Classification schemes (qualitative method)
 
@@ -132,6 +127,9 @@ We built the following classification schemes:
   * URL: [https://www.mindomo.com/mindmap/classification-by-review-types-c5761495660e44f78c98868ea16e087f](https://www.mindomo.com/mindmap/classification-by-review-types-c5761495660e44f78c98868ea16e087f)
   * Responsable researcher to classify: geiser@usp.br 
   * Responsable researcher to validate: diego.matos@famed.ufal.br
+  
+
+  
   
 2. Classification of literature reviews by contexts
   * Purpose: Identify the contexts in which gamification was framed for the literature review.
