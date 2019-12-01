@@ -136,25 +136,33 @@ We built the following classification schemes:
   | Scoping Review | Review that includes clear selection and data extraction process. Close similar to structure narrative review or descriptive/mapping review, but it includes gray literature. |
   | Critical Review | A review that includes evaluation and an interpretive analysis of existing literature on a particular topic of interest to reveal strengths, weaknesses, contradictions, controversies, inconsistencies, and/or other important issues with respect to theories, hypotheses, research methods and/or empirical results. |
   | Realistic Review | Review based on a theoretical model/framework in which the data is structured according to this framework/model to find out whether, where and how it is applicable. |
-  | Systematic Review (Aggregative Review) | Review that uses qualitative assessment to synthetize and to analyze the extracted data from primary studies. |
-  | Meta-analysis (Aggregative Review) | In adittion to a qualitative assessment of primary studies, a meta-analysis includes statistical analysis on effect sizes to combine the results of independent studies, and to find significant differences. |
+  | Systematic Review | Review with qualitative assessment to synthetize and analyze the extracted data from primary studies. |
+  | Meta-analysis | In adittion to a qualitative assessment of primary studies, a meta-analysis includes statistical analysis on effect sizes to combine the results of independent studies, and to find significant differences. |
   
 2. Classification of literature reviews by contexts
   * Purpose: Identify the contexts in which gamification was framed for the literature review.
   * URL: [https://www.mindomo.com/mindmap/classification-of-reviews-by-context-fe0a4a1a13a6493eb46d1d4b407794f2](https://www.mindomo.com/mindmap/classification-of-reviews-by-context-fe0a4a1a13a6493eb46d1d4b407794f2)
   * Responsable researcher to classify: geiser@usp.br
   * Responsable researcher to validate: diego.matos@famed.ufal.br
-  
-3. Classification of review objectives on gamification:
-  * Purpose: Identify the review objectives explored by the literature reviews on gamification.
-  * URL: [https://www.mindomo.com/mindmap/ddfbaf40dcf94d9399c70571a0fbfd99](https://www.mindomo.com/mindmap/ddfbaf40dcf94d9399c70571a0fbfd99)
-  * Responsable researcher to classify: 
-  * Responsable researcher to validate: 
-  
+  * The contexts in which the reviews are classified follows the next scheme:
+    - Health (E.g. gamification in health)
+    - Education (E.g. gamification in higher education)
+    - Environment and Society (E.g. gamification to promote waste recycling)
+    - Business, Marketing, Enterprise and Services
+      * Software Engineering (E.g. gamification in software engineering)
+      * Crowsourcing (E.g. gamification in crowsourcing)
+      * Information Systems (E.g. gamification in information systems)
+    - Without context (E.g. gamification per-se, gamification frameworks)
+    
 4. Classification of research questions on gamification:
   * Purpose: Identify the research questions explored by the literature reviews on gamification.
   * URL: [https://www.mindomo.com/mindmap/a124fd6451ec4e39949b997e9fa63283](https://www.mindomo.com/mindmap/a124fd6451ec4e39949b997e9fa63283)
   * Responsable researcher to classify: 
   * Responsable researcher to validate: 
 
-  
+3. Classification of review objectives on gamification:
+  * Purpose: Identify the review objectives explored by the literature reviews on gamification.
+  * URL: [https://www.mindomo.com/mindmap/ddfbaf40dcf94d9399c70571a0fbfd99](https://www.mindomo.com/mindmap/ddfbaf40dcf94d9399c70571a0fbfd99)
+  * Responsable researcher to classify: 
+  * Responsable researcher to validate: 
+
