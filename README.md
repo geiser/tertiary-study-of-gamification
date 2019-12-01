@@ -107,15 +107,15 @@ If there is a disagreement between the _main reviewer_ and _second reviewer_, a 
 
 The data analysis is carried out through quantitative and qualitative methods. These methods are:
 
-* [Method: Classification schemes (qualitative method)](#method:-classification-schemes-(qualitative-method))
+* [Method: Classification schemes (qualitative method)](#method-classification-schemes-qualitative-method)
 
 ## Method: Classification schemes (qualitative method)
 
-A classification scheme is used to group the extracted data based on the common characteristics of them.
+A classification scheme is used to group the extracted data based on the common characteristics of them. Therefore, the tool mindomo is used for this purpose.
 
 * Tool: Mindomo ([https://www.mindomo.com](https://www.mindomo.com))
  
-Some information may fall in more than one category. Therefore, when the data extracted fall in more than one category, the icon with the number will be used to indicate that the information fall in more than one category. As example, in the figure below, we shows that the information "Gamification for waste management and gamification for schoolchildren" extracted from the litetarture review "A review of the applicability of gamification and game-based learning to improve household-level waste management practices among schoolchildrens" fall in the two categories: (1) "education", and (2) "environment and society".
+Some information may fall in more than one category. Therefore, when the data extracted fall in more than one category, an icon is used to indicate the number of categories in which this data fall. As example, in the figure below, we shows that the information "Gamification for waste management and gamification for schoolchildren" extracted from the litetarture review "A review of the applicability of gamification and game-based learning to improve household-level waste management practices among schoolchildrens" fall in the two categories: (1) "education", and (2) "environment and society".
 
 ![example-fall-in-two-categories01](figs/06screenshot.png)
 ![example-fall-in-two-categories01](figs/07screenshot.png)
@@ -127,9 +127,17 @@ We built the following classification schemes:
   * URL: [https://www.mindomo.com/mindmap/classification-by-review-types-c5761495660e44f78c98868ea16e087f](https://www.mindomo.com/mindmap/classification-by-review-types-c5761495660e44f78c98868ea16e087f)
   * Responsable researcher to classify: geiser@usp.br 
   * Responsable researcher to validate: diego.matos@famed.ufal.br
-  
+  * The classification of reviews by types follows the characteristics indicated in the table.
 
-  
+  | Review type | Description |
+  |-------------|-------------|
+  | Structured Narrative Review | Close similar to a traditional review because may have bies. Its extraction processes may be unclear, may not include qualitative analysis or not use classification as methods of data synthesis (such as voting, counting or other) |
+  | Descriptive or Mapping Review | Review that includes clear selection and data extraction process. A qualitative assessment is not carried out, and the data analysis is based on the interpretation of each selected study as a unit in the whole  published literature | 
+  | Scoping Review |  |
+  | Critical Review |  |
+  | Realistic Review |  |
+  | Systematic Review (Aggregative Review) |  |
+  | Meta-analysis (Aggregative Review) |  |
   
 2. Classification of literature reviews by contexts
   * Purpose: Identify the contexts in which gamification was framed for the literature review.
