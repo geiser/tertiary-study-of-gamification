@@ -154,15 +154,23 @@ We built the following classification schemes:
       * Information Systems (E.g. gamification in information systems)
     - Without context (E.g. gamification per-se, gamification frameworks)
     
-4. Classification of research questions on gamification:
+4. Classification of research questions used on the gamification research:
   * Purpose: Identify the research questions explored by the literature reviews on gamification.
   * URL: [https://www.mindomo.com/mindmap/a124fd6451ec4e39949b997e9fa63283](https://www.mindomo.com/mindmap/a124fd6451ec4e39949b997e9fa63283)
-  * Responsable researcher to classify: 
-  * Responsable researcher to validate: 
+  * Responsable researcher to classify: geiser@usp.br
+  * Responsable researcher to validate: leonardo.marques@cedu.ufal.br
+  * The major groups for the classification of RQs are:
+    - RQs about the game-related approaches
+    - RQs about the gamification-based design
+    - RQs about the adaptive gamification
+    - RQs about the gamification analytics
+    - RQs about the gamification models/frameworks
+    - RQs about the publication information on gamification
+    - RQs not related to gamification or game-related approaches (RQs related to the non-game contexts)
 
-3. Classification of review objectives on gamification:
+3. Classification of review objectives on gamification research:
   * Purpose: Identify the review objectives explored by the literature reviews on gamification.
   * URL: [https://www.mindomo.com/mindmap/ddfbaf40dcf94d9399c70571a0fbfd99](https://www.mindomo.com/mindmap/ddfbaf40dcf94d9399c70571a0fbfd99)
-  * Responsable researcher to classify: 
+  * Responsable researcher to classify: geiser@usp.br
   * Responsable researcher to validate: 
 
