@@ -157,7 +157,7 @@ We built the following classification schemes:
 
 4. Classification of research questions used on the gamification research:
   * Purpose: Identify the research questions explored by the literature reviews on gamification.
-  * URL: [https://www.mindomo.com/mindmap/a124fd6451ec4e39949b997e9fa63283](https://www.mindomo.com/mindmap/a124fd6451ec4e39949b997e9fa63283)
+  * URL: [https://www.mindomo.com/mindmap/a64d340f6f504397bd68afb61b0d3297](https://www.mindomo.com/mindmap/a64d340f6f504397bd68afb61b0d3297)
   * Responsable researcher to classify: geiser@usp.br
   * Responsable researcher to validate: leonardo.marques@cedu.ufal.br
   * The major groups for the classification of RQs are:
