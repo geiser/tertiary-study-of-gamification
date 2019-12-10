@@ -1,0 +1,19 @@
+[Unit]
+Description=%i service of tertiary-study-of-gamification with docker-compose
+
+[Service]
+Restart=always
+WorkingDirectory=/home/gcc/Workspace/tertiary-study-of-gamification
+# Remove old containers, pull images and build containers
+ExecStartPre=/usr/local/bin/docker-compose -p tertiary-study-of-gamification down -v
+ExecStartPre=/usr/local/bin/docker-compose -p tertiary-study-of-gamification pull %i
+ExecStartPre=/usr/local/bin/docker-compose -p tertiary-study-of-gamification build --force-rm %i
+# Compose up
+ExecStart=/usr/local/bin/docker-compose -p tertiary-study-of-gamification up --no-build %i
+# Compose down and restart
+ExecStop=/usr/local/bin/docker-compose -p tertiary-study-of-gamification down -v
+ExecReload=/usr/local/bin/docker-compose -p tertiary-study-of-gamification restart %i
+
+[Install]
+WantedBy=multi-user.target
+

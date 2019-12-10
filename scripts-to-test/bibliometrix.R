@@ -1,12 +1,12 @@
+source(paste0(getwd(),"/lib/zconvert2df.R"))
+
 library(bibliometrix)
 
-df <- convert2df(readFiles("zotero.bib"), dbsource = "scopus", format = "bibtex")
-results <- biblioAnalysis(df, sep = ";")
+M <- zconvert2df(paste0(getwd(), '/src-data/zotero.json'))
 
+results <- biblioAnalysis(M, sep = ";")
 resume <- summary(object = results, k = 10, pause = FALSE)
 
 plot(x = results, k = 10, pause = FALSE)
 
 NetMatrix <- biblioNetwork(M, analysis = "co-citation", network = "references", sep = ". ")
-
-
