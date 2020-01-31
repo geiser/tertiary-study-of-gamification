@@ -16,6 +16,7 @@ if (!require(plotly)){install.packages("plotly"); require(plotly, quietly=TRUE)}
 require(Matrix, quietly = TRUE)
 library(shiny)
 library(shinyTree)
+options(stringsAsFactors=F)
 
 source('lib/zconvert2df.R')
 source('lib/md2list.R')
@@ -23,6 +24,9 @@ source('lib/getSelection.R')
 source('lib/tree2latex_df.R')
 source('lib/tree2List.R')
 source('lib/dfAnnual2plotly.R')
+
+source('mods/ClassificationByContext.R')
+source('mods/ClassificationByReviewType.R')
 
 initValues <- function(values, filepath) {
   values$results = list("NA")
@@ -100,6 +104,10 @@ ui <- navbarPage(
     "Classification"
     , "  ", "  ", "Related to the review by itself"
     , tabPanel(
+      "Classification by context/domain"
+      , ClassificationByContextUI("class-context")
+    )
+    , tabPanel(
       "Classification by types"
       , mainPanel(
         tabsetPanel(
@@ -159,7 +167,6 @@ server <- function(input, output, session) {
   values <- reactiveValues()
   isolate({ values <- initValues(values, filepath = 'src-data/zotero.json') })
   
-  
   # stop the R session & set file upload max size
   session$onSessionEnded(stopApp)
   options(shiny.maxRequestSize=100*1024^2) 
@@ -167,14 +174,13 @@ server <- function(input, output, session) {
   ## LOAD PAGE ##
   output$load_dt <- DT::renderDT({
     isolate({
-      MData <- as.data.frame(apply(values$Morig, 2, function(x) { substring(x,1,150) }), stringsAsFactors = FALSE)
+      MData <- as.data.frame(apply(values$Morig, 2, function(x) { substring(x,1,150) }), stringsAsFactors = F)
       MData$DOI <- paste0('<a href=\"http://doi.org/', MData$DI, '\" target=\"_blank\">', MData$DI, '</a>')
-      nome <- c("DOI", names(MData)[-length(names(MData))])
-      MData <- MData[nome]
+      MData <- MData[c("DOI", names(MData)[-length(names(MData))])]
       
       #
-      DT::datatable(MData, escape = FALSE, rownames = FALSE, extensions = c("Buttons")
-                    , options = list(pageLength = 100, dom = 'Bfrtip', buttons = list('pageLength','copy', 'pdf', 'print')
+      DT::datatable(MData, escape = F, rownames = F, extensions = c("Buttons")
+                    , options = list(pageLength = -1, dom = 'Bfrtip', buttons = list('pageLength','csv','pdf','copy','print')
                                      , lengthMenu = list(c(25,50,100,-1), c('25 rows', '50 rows', '100 rows','Show all'))
                                      , columnDefs = list(list(className = 'dt-center', targets = 0:(length(names(MData))-1))))  
                     , class = 'cell-border compact stripe')  %>% 
@@ -194,7 +200,7 @@ server <- function(input, output, session) {
   output$filterTreeReviewContext <- renderTree({ contexts })
   
   output$filterTextDim <- renderUI({
-    dimMatrix=paste("Documents", dim(values$M)[1], "of", dim(values$Morig)[1])
+    dimMatrix <- paste("Documents", dim(values$M)[1], "of", dim(values$Morig)[1])
     textInput("filterTextDim", "Number of Documents", value=dimMatrix)
   })
   
@@ -238,7 +244,7 @@ server <- function(input, output, session) {
     Mdisp <- as.data.frame(apply(values$M, 2, function(x){ substring(x,1,150) }), stringsAsFactors = FALSE)    
     if (dim(Mdisp)[1]>0){
       DT::datatable(Mdisp, rownames = FALSE, extensions = c("Buttons"),
-                    options = list(pageLength = 100, dom = 'Bfrtip',
+                    options = list(pageLength = -1, dom = 'Bfrtip',
                                    buttons = c('pageLength','copy', 'csv', 'excel', 'pdf', 'print'),
                                    lengthMenu = list(c(25,50,100,-1),c('25 rows', '50 rows', '100 rows','Show all')),
                                    columnDefs = list(list(className = 'dt-center', targets = 0:(length(names(Mdisp))-1)))),
@@ -251,10 +257,15 @@ server <- function(input, output, session) {
   
   
   ## CLASSIFICATION PAGE ##
-  output$classification_by_type_table <- DT::renderDT({
+  output$classification_by_type_table <- DT::renderDataTable({
     values$c2type <- tree2latex_df(types, items, keys = values$M$key, categories = getSelectionCat(input$filterTreeReviewType))
     values$c2type
-  })
+  }
+  , options = list(pageLength = -1, dom = 'Bfrtip',
+                   buttons = c('pageLength','copy', 'csv', 'excel', 'pdf', 'print'),
+                   lengthMenu = list(c(25,50,100,-1), c('25 rows', '50 rows', '100 rows','Show all')),
+                   columnDefs = list(list(className = 'dt-center')))
+  )
   
   output$classification_by_type_tex_fields <- renderUI({
     c2type_names = sort(unique(colnames(values$c2type)))
@@ -269,7 +280,7 @@ server <- function(input, output, session) {
   })
   
   #
-  output$classification_by_sciforum_table <- DT::renderDT({
+  output$classification_by_sciforum_table <- DT::renderDataTable({
     M <- values[['M']]
     df <- do.call(rbind, lapply(unique(M[['DT']]), FUN = function(t) {
       citekeys <- items$citekey[items$key %in% M$key[which(M$DT == t)]]
@@ -279,7 +290,12 @@ server <- function(input, output, session) {
     
     values$c2forum <- df
     values$c2forum
-  })
+  }
+  , options = list(pageLength = -1, dom = 'Bfrtip',
+                   buttons = c('pageLength','copy', 'csv', 'excel', 'pdf', 'print'),
+                   lengthMenu = list(c(25,50,100,-1), c('25 rows', '50 rows', '100 rows','Show all')),
+                   columnDefs = list(list(className = 'dt-center')))
+  )
   
   output$classification_by_sciforum_tex_fields <- renderUI({
     c2forum_names = sort(unique(colnames(values$c2forum)))
@@ -369,12 +385,11 @@ server <- function(input, output, session) {
   })
   
   output$ae2TypeForumBarChart <- renderPlotly({
-    
-    
     df <- values$e2type_forum
-    
-    
   })
+  
+  callModule(ClassificationByContext, "class-context"
+             , reactive({ values$M }), reactive({ input$filterTreeReviewContext }))
   
 }
 

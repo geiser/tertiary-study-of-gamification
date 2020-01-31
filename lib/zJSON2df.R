@@ -68,7 +68,7 @@ zJSON2df <- function(filepath) {
     
     de_keywords <- NA
     for (x in notes$value[which(notes$key == item$key & notes$field == 'Author keywords')]) {
-      keywords <- stri_split_regex(x, "[;,.]")[[1]]
+      keywords <- stringi::stri_split_regex(x, "[;,.]")[[1]]
       keywords <- as.vector(sapply(keywords, FUN = function(k) {
         return(SemNetCleaner::singularize(qdap::Trim(tolower(k))))
       }))
@@ -82,7 +82,7 @@ zJSON2df <- function(filepath) {
     
     id_keywords <- NA
     for (x in notes$value[which(notes$key == item$key & notes$field == 'Keywords')]) {
-      keywords <- stri_split_regex(x, "[;,.]")[[1]]
+      keywords <- stringi::stri_split_regex(x, "[;,.]")[[1]]
       keywords <- as.vector(sapply(keywords, FUN = function(k) {
         return(SemNetCleaner::singularize(qdap::Trim(tolower(k))))
       }))

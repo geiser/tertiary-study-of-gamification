@@ -5,7 +5,7 @@ source(paste0(getwd(),'/lib/zJSON2df.R'))
 zconvert2df <- function (filepath, format = "json") {
   
   md5file <- paste0(dirname(filepath),'/',as.character(tools::md5sum(filepath)), '.rds')
-  if (file.exists(md5file)) return(read.data(file = md5file))
+  if (file.exists(md5file)) return(SemNetCleaner::read.data(file = md5file))
   
   cat("\nConverting your ", filepath, " collection into a bibliographic dataframe\n\n")
   if (length(setdiff(format, c("json", "rdf"))) > 0) {
