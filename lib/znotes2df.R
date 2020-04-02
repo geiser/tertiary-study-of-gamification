@@ -124,7 +124,10 @@ znote2list <- function(note, id = '', fields = list(
           stop()
         }
         # validating sfields
-        if (any(sapply(fields[[nfield]], FUN = function(x) { stringr::str_starts(sfield, paste0(x,' .+')) }))) {
+        if (any(sapply(fields[[nfield]]
+                       , FUN = function(x) {
+                         stringr::str_starts(sfield, paste0(x,' .+'))
+                         }))) {
           cat('\nErro in note with ',id,' as nfield:', paste0('(',nfield,')'),' as sfield:', paste0('(',sfield,')'),'\n','note:\n',note,'\n')
           stop()
         }
@@ -163,7 +166,9 @@ znotesJSON2df <- function(json) {
 
 znotes2df <- function(
   filepath, format = 'json'
-  , only_one=c('Affiliation','Cited by','Paper type','Type of selected studies', 'References','Review type','Context','Databases','Search string')
+  , only_one=c('Affiliation','Cited by','Paper type','Type of selected studies', 'References'#, 'Author Keywords'
+               , 'Review type', 'Context', 'Databases', 'Search string'
+               , 'Number of selected studies', 'Type of selected studies')
   , should_have=c(only_one,'RO\\(.+\\)','RQ\\(.+\\)')
   ) {
   library(jsonlite)

@@ -4,11 +4,11 @@ services_shiny_build_target =  prod
 services_shiny_image =  geiser/infographic-plataforma-evidencias_shiny
 services_shiny_container_name =  infographic-plataforma-evidencias_shiny
 
-PREFIX = /home/gcc/Workspace/tertiary-study-of-gamification
+PREFIX = /c/Users/user/Workspace/tertiary-study-of-gamification
 APP_NAME = tertiary-study-of-gamification
 
-DD = /usr/bin/docker
-DC = /usr/local/bin/docker-compose
+DD = /c/ProgramData/chocolatey/bin/docker
+DC = /c/ProgramData/chocolatey/bin/docker-compose
 
 
 # HELP: This will output the help for each task
@@ -122,7 +122,7 @@ endif
 # Development environment
 dev: ## Start r-server in http://127.0.0.0.1:8787/ to continue with the development
 	@$(DD) pull geiser/r-studio:latest
-	$(DD) run -i -t --rm --name="$(APP_NAME)_dev" -p=8787:8787 -v $(shell pwd):/home/gcc geiser/r-studio:latest
+	winpty $(DD) run -i -t --rm --name="$(APP_NAME)_dev" -p=8787:8787 -v /$(shell pwd):/home/gcc geiser/r-studio:latest
 	
 # HELPERS
 prune: ## clean all that is not actively used

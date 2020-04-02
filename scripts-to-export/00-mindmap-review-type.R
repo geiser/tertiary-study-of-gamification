@@ -2,9 +2,9 @@
 library(xml2)
 library(jsonlite)
 
-source('htm2txt.R')
-source('znotes2df.R')
-
+source(paste0(getwd(), '/lib/htm2txt.R'))
+source(paste0(getwd(), '/lib/znotes2df.R'))
+source(paste0(getwd(), '/lib/initValue.R'))
 
 filepath <- 'src-data/zotero.json'
 notes <- znotes2df(filepath = filepath)
@@ -13,10 +13,11 @@ zjson <- fromJSON(filepath)
 ## Review type
 rt_notes <- notes[which(notes$field == 'Review type'),]
 ts_notes <- notes[which(notes$field == 'Type of selected studies'),]
-
+type_df <- initValue('reviewsByContext', 'src-data/mom/type.xml')$df
 
 lt_result <- lapply(seq(1,nrow(zjson$items)), FUN = function(j) {
   x <- zjson$items[j,]
+  if (x$key %in% type_df$item) { return() }
   idx <- which(rt_notes$key == x$key)
   
   page <- rt_notes$page[idx]
@@ -48,8 +49,8 @@ lt_result <- lapply(seq(1,nrow(zjson$items)), FUN = function(j) {
   
   return(rt_list)
 })
+lt_result <- lt_result[!sapply(lt_result, FUN = is.null)]
 
 xml <- as_xml_document(
   list(map=structure(list(node=structure(lt_result, TEXT="Without classification")), version="1.1.0")))
-write_xml(xml,'mm/review-type.mm')
-
+write_xml(xml,'src-data/mm/review-type3.mm')

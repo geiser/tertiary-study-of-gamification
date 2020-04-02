@@ -1,8 +1,10 @@
+
 library(xml2)
 library(jsonlite)
 
-source('htm2txt.R')
-source('znotes2df.R')
+source(paste0(getwd(), '/lib/htm2txt.R'))
+source(paste0(getwd(), '/lib/znotes2df.R'))
+source(paste0(getwd(), '/lib/initValue.R'))
 
 filepath <- 'src-data/zotero.json'
 notes <- znotes2df(filepath = filepath)
@@ -17,16 +19,21 @@ ro_dat <- do.call(c, lapply(ro_dat, FUN = function(x) { paste0(stemmer(x), colla
 cl <- hclust(stringdist::stringdistmatrix(ro_dat, method = "cosine", useNames = "strings"))
 ro_notes <- ro_notes[c(cl$order),]
 
+review_objective_df <- initValue('reviewsByReviewObjective', 'src-data/mom/review-objective.xml')$df
+
 ##
 lt_result <- lapply(seq(1,nrow(ro_notes)), FUN = function(j) {
   ro_row <- ro_notes[j,]
   is_inferred <- ''; if (ro_row$inferr) is_inferred <- '(inferred)'
-  
   item <- zjson$items[which(zjson$items$itemID == ro_row$itemID),]
   
   attachment_list <- list()
   for (i in seq(1, nrow(item$attachments[[1]]))) {
     plink <- paste0(item$attachments[[1]][i,'uri'],'/file?page=', ro_row$page)
+    
+    idxs <- which(review_objective_df$RO == ro_row$field & review_objective_df$hyperlink == plink)
+    if (length(idxs) > 0) { return() }
+    
     filename <- item$attachments[[1]][i,'title']
     attachment_list <- append(attachment_list, list(node = structure(list(), LINK=plink, TEXT=filename)))
   }
@@ -50,8 +57,8 @@ lt_result <- lapply(seq(1,nrow(ro_notes)), FUN = function(j) {
   
   return(rt_list)
 })
+lt_result <- lt_result[!sapply(lt_result, FUN = is.null)]
 
 xml <- as_xml_document(
   list(map=structure(list(node=structure(lt_result, TEXT="Without classification")), version="1.1.0")))
-write_xml(xml,'mm/review-objective.mm')
-
+write_xml(xml,'src-data/mm/review-objective3.mm')
