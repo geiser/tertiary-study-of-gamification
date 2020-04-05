@@ -5,6 +5,9 @@ library(pivottabler)
 library(plotly)
 
 source(paste0(getwd(),'/lib/df2DT.R'))
+source(paste0(getwd(),'/lib/barMapping.R'))
+source(paste0(getwd(),'/lib/lineMapping.R'))
+
 
 mappingDataUI <- function(id, label="", title=label) {
   ns <- NS(id)
@@ -16,10 +19,13 @@ mappingDataUI <- function(id, label="", title=label) {
         type="tabs", id=ns("selectedTabPanel")
         , tabPanel("Data table", DT::DTOutput(ns("sourceDT")), value="data")
         , tabPanel("Pivot table", DT::DTOutput(ns("pivotDT")), value="pivot")
-        , tabPanel("Charts",  verticalLayout(
-          radioButtons(ns('chartType'), 'Chart type'
-                       , choices = c('pie', 'stacked-bar', 'bar', 'line'), selected = 'pie', inline = T)
-          , plotlyOutput(ns("plotlyChart"))), value = "charts")
+        , tabPanel("Charts", flowLayout(
+          column(3, radioButtons(ns('chartType'), 'Chart type'
+                                 , choices = c('pie', 'stacked-bar', 'bar', 'line')
+                                 , selected = 'pie', inline = T)
+                 , actionButton(ns("doPlot"), "Plot")
+                 , actionButton(ns("doClear"), "Clear")))
+          , plotlyOutput(ns("plotlyChart")), value = "charts")
         , tabPanel("Latex table", verbatimTextOutput(ns("latexDT")), value="latex")
       ))
     )
@@ -135,7 +141,7 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
         , textInput(ns("iname"), 'Str pattern for the legend', 'item (#)')
         , numericInput(ns("plotFontSize"), "Plot font size:", 12, min=4, step=2)
         , numericInput(ns("plotWidth"), "Plot width:", 800, min=20, step=20)
-        , numericInput(ns("plotHeight"), "Plot height:", 350, min=20, step=20)
+        , numericInput(ns("plotHeight"), "Plot height:", 400, min=20, step=20)
       )
       if (input$chartType == 'bar' || input$chartType == 'stacked-bar' || input$chartType == 'line') {
         vlayout <- verticalLayout(
@@ -149,9 +155,6 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
           , selectInput(ns("pieTextinfo"), 'Textinfo', choices=c('label','percent','value'), selected='value', multiple=T)
         )
       }
-      vlayout <- verticalLayout(
-        vlayout, fillRow(actionButton(ns("doPlot"), "Plot"), actionButton(ns("doClear"), "Clear")) 
-      )
     }
     vlayout
   })
@@ -329,81 +332,33 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
   
   
   output$plotlyChart <- renderPlotly({
-    
-    msymbols <- c('circle', 'square', 'diamond', 'cross', 'x', 'triangle-up', 'pentagon', 'star', 'hexagram'
-                  , 'circle-open-dot', 'square-open-dot', 'diamond-open-dot', 'cross-open-dot', 'x-open-dot'
-                  , 'triangle-up-open-dot', 'pentagon-open-dot', 'star-open-dot', 'hexagram-open-dot')
-    dashs <- c("solid", "dot", "dash", "longdash", "dashdot", "longdashdot") 
-    
     withProgress(message = 'Making plot', detail = 'This may take a while ...', {
-      cdf <- chartDf()
-      if (is.null(cdf)) { return() }
+      cdf <- chartDf(); if (is.null(cdf)) return() 
+      
+      x <- c('val')
+      if (input$isDataGroup) x <- groupValues()
+      
       if (input$chartType == 'pie') {
-        
         textinfo <- paste0(input$pieTextinfo, collapse='+')
         values <- cdf$rawValue
         if (!is.null(numericField)) values <- round(values, 2) 
         fig <- plot_ly(labels=cdf$group, values=values, type='pie', textinfo=textinfo
                        , width=input$plotWidth, height=input$plotHeight, sort = F
                        , textfont=list(size = input$plotFontSize))
-        fig <- layout(fig, height=input$plotHeight+250, width=input$plotWidth+150
-                      , margin=list(l=75,r=75, b=125, t=125, pad=4))
-        
-      } else if (input$chartType == 'bar' || input$chartType == 'stacked-bar' || input$chartType == 'line') {
-        
-        fig <- plot_ly(type='bar', textposition='inside', width=input$plotWidth, height=input$plotHeight)
-        if (input$chartType == 'line') {
-          fig <- plot_ly(type='scatter', mode='lines+markers', width=input$plotWidth, height=input$plotHeight)
-        }
-        
-        x <- c('val')
-        if (input$isDataGroup) {
-          x <- groupValues()
-        }
-        c_count <- 0; y_acc <- rep(0, length(x))
-        for (item in input$selectedFilterBy) { #
-          tdf <- cdf[(cdf$ColumnLevel01 %in% x) & cdf$RowLevel01 == item,]
-          iname <- item
-          if (input$isShortedLegend) {
-            iname <- stringr::str_replace_all(input$iname, "\\#", as.character(c_count))
-          }
-          y <- sapply(x, FUN = function(i) {
-            if (i %in% tdf$ColumnLevel01) {
-              values <- tdf$rawValue[tdf$ColumnLevel01 == i]
-              if (!is.null(numericField)) values <- round(values, 2)
-              return(values)
-            } else {
-              return(0)
-            }
-          })
-          y[is.na(y)] <- 0; y_acc <- y_acc + y; c_count <- c_count + 1
-          c_msymbols <- c_count %% length(msymbols)
-          fig <- add_trace(fig, x=x, y=y, text=y, name=iname, textfont=list(size=input$plotFontSize)
-                           , textposition=input$selectTextPosition
-                           , line = list(dash = dashs[c_msymbols %% length(dashs)])
-                           , marker=list(symbol=msymbols[c_msymbols], size = input$plotFontSize-6))
-        }
-        
-        if (input$chartType == 'line') {
-          fig <- layout(fig, yaxis=list(range = c(input$plotYMin, input$plotYMax)))
-        } else {
-          barmode <- 'group'; if (input$chartType == 'stacked-bar') barmode <- 'stack'
-          fig <- layout(fig, barmode=barmode, yaxis=list(range = c(input$plotYMin, input$plotYMax)))
-          if (barmode == 'stack') {
-            fig <- add_trace(fig, x=x, y=y_acc, text=y_acc, type='scatter'
-                             , mode='mark+text', showlegend=F, name=iname
-                             , textfont=list(size=input$plotFontSize+2), textposition='top center') 
-          }
-        }
+        fig <- layout(fig, margin=list(l=75,r=75, b=125, t=125, pad=4))
+      } else if (input$chartType == 'line') {
+        fig <- lineMapping(cdf, input$selectedFilterBy, numericField, x
+                           , input$plotWidth, input$plotHeight, input$plotFontSize
+                           , input$isShortedLegend, input$iname, input$selectTextPosition
+                           , input$legendPosition, input$plotYMin, input$plotYMax)
+      } else {
+        barmode <- 'group'
+        if (input$chartType == 'stacked-bar') barmode <- 'stack'
+        fig <- barMapping(cdf, input$selectedFilterBy, numericField, x
+                          , input$plotWidth, input$plotHeight, input$plotFontSize
+                          , input$isShortedLegend, input$iname, input$selectTextPosition
+                          , input$legendPosition, barmode, input$plotYMin, input$plotYMax)
       }
-      if (input$legendPosition == 'inside') {
-        fig <- layout(fig, legend = list(x = 0.01, y = 0.99))
-      } else if (input$legendPosition == 'bottom') {
-        fig <- layout(fig, legend = list(orientation = 'h'))
-      } else if (input$legendPosition == 'none') {
-        fig <- layout(fig, showlegend = FALSE)
-      }
-      #
       return(fig)
     })
   })

@@ -1,0 +1,25 @@
+imagebar                Plot a bar chart with bars filled with png and
+                        jpeg images.
+imagebar_s              Plot a stacked bar chart with bars filled with
+                        png and jpeg images.
+imageboxplot            Plot a boxplot with boxes filled with png and
+                        jpeg images.
+imagepie                Plot a pie chart with slices filled with png
+                        and jpeg images.
+imagering1              Plot a ring chart using images to fill the
+                        ring.
+imagerings2             Plot a ring chart using images to fill the
+                        rings.
+pattern                 Generate a pattern in png format.
+patternbar              Plot a bar chart using patterns and colors to
+                        fill the bars.
+patternbar_s            Plot a stacked bar chart using patterns and
+                        colors to fill the bars.
+patternboxplot          Plot a boxplot using patterns and colors to
+                        fill the boxes.
+patternpie              Plot a pie chart using patterns and colors to
+                        fill the slices.
+patternring1            Plot a ring chart using patterns and colors to
+                        fill the ring.
+patternrings2           Plot a ring chart using patterns and colors to
+                        fill the rings.

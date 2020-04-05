@@ -1,8 +1,8 @@
 version =  3.7
 services_shiny_build_context =  ./docker/shiny
 services_shiny_build_target =  prod
-services_shiny_image =  geiser/infographic-plataforma-evidencias_shiny
-services_shiny_container_name =  infographic-plataforma-evidencias_shiny
+services_shiny_image =  geiser/tertiary-study-of-gamification_shiny
+services_shiny_container_name =  tertiary-study-of-gamification_shiny
 
 PREFIX = /c/Users/user/Workspace/tertiary-study-of-gamification
 APP_NAME = tertiary-study-of-gamification
@@ -122,7 +122,7 @@ endif
 # Development environment
 dev: ## Start r-server in http://127.0.0.0.1:8787/ to continue with the development
 	@$(DD) pull geiser/r-studio:latest
-	winpty $(DD) run -i -t --rm --name="$(APP_NAME)_dev" -p=8787:8787 -v /$(shell pwd):/home/gcc geiser/r-studio:latest
+	$(DD) run -i -t --rm --name="$(APP_NAME)_dev" -p=8787:8787 -v $(shell pwd):/home/gcc geiser/r-studio:latest
 	
 # HELPERS
 prune: ## clean all that is not actively used

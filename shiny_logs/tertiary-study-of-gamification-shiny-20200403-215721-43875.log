@@ -1,0 +1,21 @@
+su: ignoring --preserve-environment, it's mutually exclusive with --login
+Loading required package: ggplot2
+
+Attaching package: ‘plotly’
+
+The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+The following object is masked from ‘package:stats’:
+
+    filter
+
+The following object is masked from ‘package:graphics’:
+
+    layout
+
+Error in loadNamespace(name) : there is no package called ‘qdap’
+Calls: runApp ... loadNamespace -> withRestarts -> withOneRestart -> doWithOneRestart
+Execution halted
+

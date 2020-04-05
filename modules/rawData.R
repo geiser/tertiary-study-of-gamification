@@ -24,16 +24,16 @@ rawDataUI <- function(id, links = list()) {
         , span("(see \"Zotero Items Tab\" to known where these annotations come from)")
         , DT::DTOutput(ns("annotationsDT"))))
       
-      , tabPanel("Classification of Studies by Contexts"
+      , tabPanel("Classification by Contexts"
                  , verticalLayout(a(href=links[['context']], paste0("Click here to acess: ", links[['context']]))
                                   , DT::DTOutput(ns("classificationByContextDT"))))
-      , tabPanel("Classification of Studies by Review Types"
+      , tabPanel("Classification by Review Types"
                  , verticalLayout(a(href=links[['type']], paste0("Click here to acess: ", links[['type']]))
                                   , DT::DTOutput(ns("classificationByTypeDT"))))
-      , tabPanel("Classification of Studies by Review Objectives"
+      , tabPanel("Classification by Review Objectives"
                  , verticalLayout(a(href=links[['objective']], paste0("Click here to acess: ", links[['objective']]))
                                   , DT::DTOutput(ns("classificationByRODT"))))
-      , tabPanel("Classification of Studies by Review Questions"
+      , tabPanel("Classification by Review Questions"
                  , verticalLayout(a(href=links[['question']], paste0("Click here to acess: ", links[['question']]))
                                   , DT::DTOutput(ns("classificationByRQDT"))))
       )

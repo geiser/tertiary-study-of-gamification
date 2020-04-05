@@ -169,8 +169,8 @@ server <- function(input, output, session) {
     , pctExpression=pctExpression)
   
   callModule(mappingDataMD, "mapByReviewType", data(), 'Review type', trees, list(
-    filterValues = c('Mapping Review', 'Aggregative Review', 'Systematic Review', 'Meta-analysis'
-                     , 'Narrative Review', 'Scoping Review', 'Critical Review')
+    filterValues = c('Narrative Review', 'Mapping Review', 'Meta-analysis', 'Systematic Review'
+                     , 'Scoping Review', 'Critical Review')
     , removeDuplicateSort = c('Systematic Review', 'Meta-analysis', 'Aggregative Review'
                               , 'Critical Review', 'Mapping Review', 'Narrative Review', 'Scoping Review'))
     , pctExpression=pctExpression)
@@ -255,12 +255,14 @@ server <- function(input, output, session) {
   ##
   
   output$pivotPanel <- renderUI({
-    verticalLayout(
-      fluidRow(
-        span("- To obtain more help about how to use pivottable in R, Click here: ")
-        , a(href='https://pivottable.js.org/', 'https://pivottable.js.org/'))
-      , rpivotTable(data=data(), rendererName="Table", width="100%")
-    )
+    withProgress(message = 'Loading pivotal table', detail = 'This may take a while ...', {
+      verticalLayout(
+        fluidRow(
+          span("- To obtain more help about how to use pivottable in R, Click here: ")
+          , a(href='https://pivottable.js.org/', 'https://pivottable.js.org/'))
+        , rpivotTable(data=data(), rendererName="Table", width="100%")
+      )
+    })
   })
   
 }

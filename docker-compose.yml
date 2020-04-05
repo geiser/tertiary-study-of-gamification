@@ -4,11 +4,10 @@ services:
     build:
       context: ./docker/shiny
       target: prod
-    image: geiser/infographic-plataforma-evidencias_shiny
-    container_name: infographic-plataforma-evidencias_shiny
+    image: geiser/tertiary-study-of-gamification_shiny
+    container_name: tertiary-study-of-gamification_shiny
     ports:
-      - "3838:3838"
+      - "3939:3838"
     volumes:
-      - '.:/srv/shiny-server/infographic-plataforma-evidencias'
+      - '.:/srv/shiny-server/tertiary-study-of-gamification'
       - './shiny_logs:/var/log/shiny-server'
-
