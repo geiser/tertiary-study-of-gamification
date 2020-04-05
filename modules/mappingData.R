@@ -19,13 +19,10 @@ mappingDataUI <- function(id, label="", title=label) {
         type="tabs", id=ns("selectedTabPanel")
         , tabPanel("Data table", DT::DTOutput(ns("sourceDT")), value="data")
         , tabPanel("Pivot table", DT::DTOutput(ns("pivotDT")), value="pivot")
-        , tabPanel("Charts", flowLayout(
-          column(3, radioButtons(ns('chartType'), 'Chart type'
-                                 , choices = c('pie', 'stacked-bar', 'bar', 'line')
-                                 , selected = 'pie', inline = T)
-                 , actionButton(ns("doPlot"), "Plot")
-                 , actionButton(ns("doClear"), "Clear")))
-          , plotlyOutput(ns("plotlyChart")), value = "charts")
+        , tabPanel("Charts", verticalLayout(
+			radioButtons(ns('chartType'), 'Chart type', choices = c('pie', 'stacked-bar', 'bar', 'line'), selected = 'pie', inline = T)
+			, flowLayout(actionButton(ns("doPlot"), "Plot"), actionButton(ns("doClear"), "Clear"))
+			, plotlyOutput(ns("plotlyChart"))), value = "charts")
         , tabPanel("Latex table", verbatimTextOutput(ns("latexDT")), value="latex")
       ))
     )
