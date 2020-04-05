@@ -3,6 +3,7 @@ if (!require(rpivotTable)){ install.packages('rpivotTable') }
 library(rpivotTable)
 library(pivottabler)
 library(plotly)
+library(RColorBrewer)
 
 source(paste0(getwd(),'/lib/df2DT.R'))
 source(paste0(getwd(),'/lib/barMapping.R'))

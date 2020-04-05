@@ -1,8 +1,9 @@
 
+
 lineMapping <- function(cdf, items, numericField=NULL, x='val', width=800, height=400, plotfontsize=12
                             , isShortedLegend = F, pattern_name = 'item(#)', textposition='inside'
                             , legendposition='inside', plotYMin=0, plotYMax=50) {
-  
+  library(RColorBrewer)  
   
   colors <- unique(c('#E6194B', '#3CB44B', '#FFE119', '#4363D8', '#F58231'
                      , '#911EB4', '#42D4F4', '#F032E6', '#BFEF45', '#FABEBE'
