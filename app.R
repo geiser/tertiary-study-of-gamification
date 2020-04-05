@@ -64,7 +64,7 @@ ui <- navbarPage(
 
 rawData <- list(
   items = initValue('items', 'src-data/zotero.json')
-  , annotations = initValue('annotations', 'src-data/zotero.json', T, 'src-data/annotations.rds')
+  , annotations = initValue('annotations', 'src-data/zotero.json', T)
   , classification = list(
     reviewsByContext = initValue('reviewsByContext', 'src-data/mom/context.xml')
     , reviewsByType = initValue('reviewsByType', 'src-data/mom/type.xml')
