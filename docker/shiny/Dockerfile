@@ -44,6 +44,8 @@ RUN install2.r -s DT \
     && install2.r -s shinyTree \
     && install2.r -s rpivotTable
 
+RUN install2.r -s RColorBrewer 
+
 #RUN install2.r -s bibliometrix
 
 # Making executable
