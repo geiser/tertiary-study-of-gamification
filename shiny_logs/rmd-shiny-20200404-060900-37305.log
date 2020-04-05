@@ -1,15 +1,0 @@
-su: ignoring --preserve-environment, it's mutually exclusive with --login
-
-Listening on http://127.0.0.1:37305
-
-
-
-processing file: index.Rmd
-output file: /tmp/RtmpcF4E6w/index.knit.md
-
-
-Output created: /tmp/RtmpcF4E6w/file164d972113.html
-
-
-Execution halted
-

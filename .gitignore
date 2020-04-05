@@ -2,6 +2,7 @@
 Makefile
 src-data/*.rds
 tmp/*
+shiny_logs/*
 
 # History files
 .Rhistory

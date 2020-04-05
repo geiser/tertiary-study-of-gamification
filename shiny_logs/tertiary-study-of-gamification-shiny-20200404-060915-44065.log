@@ -1,5 +1,0 @@
-su: ignoring --preserve-environment, it's mutually exclusive with --login
-Error in library(plotly) : there is no package called ‘plotly’
-Calls: runApp ... sourceUTF8 -> eval -> eval -> ..stacktraceon.. -> library
-Execution halted
-
