@@ -1,4 +1,5 @@
 
+docker-compose.service
 Makefile
 src-data/*.rds
 tmp/*
