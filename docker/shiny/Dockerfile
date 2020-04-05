@@ -45,3 +45,6 @@ RUN install2.r -s DT \
     && install2.r -s rpivotTable
 
 #RUN install2.r -s bibliometrix
+
+# Making executable
+COPY shiny-server.conf /etc/shiny-server/shiny-server.conf

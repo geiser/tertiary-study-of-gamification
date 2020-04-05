@@ -4,7 +4,7 @@ source('lib/znotes2df.R')
 source('lib/md2tlist.R')
 source('lib/tlist2df.R')
 
-initValue <- function(key, src, tmp = F) {
+initValue <- function(key, src, tmp = F, md5file = NULL) {
   
   
   getAuthorsFromItem <- function(dA) {
@@ -15,7 +15,8 @@ initValue <- function(key, src, tmp = F) {
   }
   
   if (tmp) {
-    md5file <- paste0('tmp/',key,'_',as.character(tools::md5sum(src)), '.rds')
+    if (is.null(md5file))
+		md5file <- paste0('tmp/',key,'_',as.character(tools::md5sum(src)), '.rds')
     if (file.exists(md5file)) return(SemNetCleaner::read.data(file = md5file))
   }
   
