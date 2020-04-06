@@ -56,7 +56,7 @@ ui <- navbarPage(
     #, mappingDataUI('mapNumSelectedStudiesByPublicationTitle', 'number of selected studies by item types'
     #                , 'Mapping number of selected studies by publication titles (conf/journal where was published)')
     
-    , " ", " ", tabPanel('explore by yourself', h3('Explore mapping by yourself'),  rpivotTableOutput('pivotTable'))
+    #, " ", " ", tabPanel('explore by yourself', h3('Explore mapping by yourself'),  rpivotTableOutput('pivotTable'))
   )
 )
 
@@ -259,9 +259,9 @@ server <- function(input, output, session) {
   
   ##
   
-  output$pivotTable <- renderRpivotTable({
-	rpivotTable(data=data());
-  })
+  #output$pivotTable <- renderRpivotTable({
+  #	rpivotTable(data=data());
+  #})
   
 }
 
