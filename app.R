@@ -99,35 +99,37 @@ server <- function(input, output, session) {
   callModule(rawDataMD, "rawData", rawData)
   
   data <- reactive({
-    md5file <- paste0('tmp/data_', as.character(digest::digest(rawData)), '.rds')
-    if (file.exists(md5file)) {
-      df <- SemNetCleaner::read.data(file = md5file)
-    } else {
-      df <- rawData$items[,c('key','citekey','citationKey','itemType', 'title', 'authors'
-                             ,'publicationTitle', 'journalAbbreviation', 'conferenceName'
-                             , 'date', 'archive', 'libraryCatalog')]
+    withProgress(message = 'Loading pivotal table', detail = 'This may take a while ...', {
+	  md5file <- paste0('tmp/data_', as.character(digest::digest(rawData)), '.rds')
+      if (file.exists(md5file)) {
+        df <- SemNetCleaner::read.data(file = md5file)
+      } else {
+        df <- rawData$items[,c('key','citekey','citationKey','itemType', 'title', 'authors'
+                               ,'publicationTitle', 'journalAbbreviation', 'conferenceName'
+                               , 'date', 'archive', 'libraryCatalog')]
       
-      notes <- rawData$annotations
-      df <- addAnnotations(df, notes, 'Cited by')
-      df <- addAnnotations(df, notes, 'Paper type')
-      df <- addAnnotations(df, notes, 'Number of selected studies')
-      df <- addAnnotations(df, notes, 'Type of selected studies', T)
+        notes <- rawData$annotations
+        df <- addAnnotations(df, notes, 'Cited by')
+        df <- addAnnotations(df, notes, 'Paper type')
+        df <- addAnnotations(df, notes, 'Number of selected studies')
+        df <- addAnnotations(df, notes, 'Type of selected studies', T)
       
-      df <- addClassification(df, rawData$classification$reviewsByContext, 'Context', T)
-      df <- addClassification(df, rawData$classification$reviewsByType, 'Review type', F)
+        df <- addClassification(df, rawData$classification$reviewsByContext, 'Context', T)
+        df <- addClassification(df, rawData$classification$reviewsByType, 'Review type', F)
       
-      rawData$classification$reviewsByObjective$df <- changeItem2keyDF(
-        rawData$classification$reviewsByObjective$df, rawData$items, notes=notes, field = 'RO')
-      classification <- rawData$classification$reviewsByObjective
-      df <- addClassification(df, classification, 'Review objective', F)
+        rawData$classification$reviewsByObjective$df <- changeItem2keyDF(
+          rawData$classification$reviewsByObjective$df, rawData$items, notes=notes, field = 'RO')
+        classification <- rawData$classification$reviewsByObjective
+        df <- addClassification(df, classification, 'Review objective', F)
       
-      rawData$classification$reviewsByQuestion$df <- changeItem2keyDF(
-        rawData$classification$reviewsByQuestion$df, rawData$items, notes=notes, field = 'RQ')
-      classification <- rawData$classification$reviewsByQuestion
-      df <- addClassification(df, classification, 'Review question', F)
+        rawData$classification$reviewsByQuestion$df <- changeItem2keyDF(
+          rawData$classification$reviewsByQuestion$df, rawData$items, notes=notes, field = 'RQ')
+        classification <- rawData$classification$reviewsByQuestion
+        df <- addClassification(df, classification, 'Review question', F)
       
-      if (!file.exists(md5file)) saveRDS(df, file = md5file)
-    }
+        if (!file.exists(md5file)) saveRDS(df, file = md5file)
+      }
+	})
     df
   })
   
@@ -255,17 +257,12 @@ server <- function(input, output, session) {
   ##
   
   output$pivotPanel <- renderUI({
-    
       verticalLayout(
         fluidRow(
           span("- To obtain more help about how to use pivottable in R, Click here: ")
           , a(href='https://pivottable.js.org/', 'https://pivottable.js.org/'))
-        , 
-		withProgress(message = 'Loading pivotal table', detail = 'This may take a while ...', {
-		rpivotTable(data=data(), rendererName="Table", width="100%")
-		})
+        , rpivotTable(data=data(), rendererName="Table", width="100%")
       )
-    
   })
   
 }
