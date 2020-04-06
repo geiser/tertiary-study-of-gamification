@@ -264,7 +264,7 @@ server <- function(input, output, session) {
 			fluidRow(
 				span("- To obtain more help about how to use pivottable in R, Click here: ")
 				, a(href='https://pivottable.js.org/', 'https://pivottable.js.org/'))
-			, rpivotTable(data=data, rendererName="Table", width="100%")
+			, rpivotTable(data=data, rendererName="Table", rows='Context', , width="100%")
 		)
 	})
     return(vl) 
