@@ -91,9 +91,8 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
     )
     
     if (input$selectedTabPanel == 'charts') {
-      value <- (input$chartType == 'pie' || input$chartType == 'stacked-bar')
       vlayout <- verticalLayout(
-        checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=value)
+        checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
         , uiOutput(ns('avoidDuplicatePanel'))
         , vlayout
       )
