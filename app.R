@@ -56,22 +56,11 @@ ui <- navbarPage(
     #, mappingDataUI('mapNumSelectedStudiesByPublicationTitle', 'number of selected studies by item types'
     #                , 'Mapping number of selected studies by publication titles (conf/journal where was published)')
     
-    , " ", " ", tabPanel('explore by yourself', h3('Explore mapping by yourself'),  rpivotTableOutput('pivotTable', width = "100%"))
+    , " ", " ", tabPanel('explore by yourself', h3('Explore mapping by yourself'),  rpivotTableOutput('pivotTable'))
   )
 )
 
 ###
-
-rawData <- list(
-  items = initValue('items', 'src-data/zotero.json')
-  , annotations = initValue('annotations', 'src-data/zotero.json', T)
-  , classification = list(
-    reviewsByContext = initValue('reviewsByContext', 'src-data/mom/context.xml')
-    , reviewsByType = initValue('reviewsByType', 'src-data/mom/type.xml')
-    , reviewsByObjective = initValue('reviewsByReviewObjective', 'src-data/mom/review-objective.xml')
-    , reviewsByQuestion = initValue('reviewsByReviewQuestion', 'src-data/mom/review-question.xml')
-  )
-)
 
 getData <- function(rawData) {
   md5file <- paste0('tmp/data_', as.character(digest::digest(rawData)), '.rds')
@@ -129,10 +118,22 @@ server <- function(input, output, session) {
     return(toReturn)
   }
   
+  rawData <- reactiveValues(
+	items = initValue('items', 'src-data/zotero.json')
+	, annotations = initValue('annotations', 'src-data/zotero.json', T)
+	, classification = list(
+		reviewsByContext = initValue('reviewsByContext', 'src-data/mom/context.xml')
+		, reviewsByType = initValue('reviewsByType', 'src-data/mom/type.xml')
+		, reviewsByObjective = initValue('reviewsByReviewObjective', 'src-data/mom/review-objective.xml')
+		, reviewsByQuestion = initValue('reviewsByReviewQuestion', 'src-data/mom/review-question.xml')
+	)
+  )
+  
   callModule(rawDataMD, "rawData", rawData)
   
+  data <- reactiveVal(NULL)
   isolate({
-	data <- getData(rawData)
+	data(getData(rawData))
   })
   
   output$dataDT <- DT::renderDataTable({ df2DT(data) })
@@ -147,13 +148,13 @@ server <- function(input, output, session) {
   
   ##
   
-  callModule(mappingDataMD, "mapByPubVenue", data, 'Paper type', trees
+  callModule(mappingDataMD, "mapByPubVenue", data(), 'Paper type', trees
              , list(filterValues = c('Journal article'
                                      , 'Conference (full-paper)', 'Conference (book chapter)'
                                      , 'Workshop', 'Workshop (book chapter)', 'Book chapter'))
              , pctExpression=pctExpression)
   
-  callModule(mappingDataMD, "mapByContext", data, 'Context', trees, list(
+  callModule(mappingDataMD, "mapByContext", data(), 'Context', trees, list(
     filterValues = c('Education', 'Business, Marketing, Enterprise and Services'
                      , 'Software Engineering', 'Information Systems', 'Crowsourcing'
                      , 'Health', 'Education + Business, Marketing, Enterprise and Services'
@@ -172,43 +173,43 @@ server <- function(input, output, session) {
                               , 'Without context'))
     , pctExpression=pctExpression)
   
-  callModule(mappingDataMD, "mapByReviewType", data, 'Review type', trees, list(
+  callModule(mappingDataMD, "mapByReviewType", data(), 'Review type', trees, list(
     filterValues = c('Narrative Review', 'Mapping Review', 'Meta-analysis', 'Systematic Review'
                      , 'Scoping Review', 'Critical Review')
     , removeDuplicateSort = c('Systematic Review', 'Meta-analysis', 'Aggregative Review'
                               , 'Critical Review', 'Mapping Review', 'Narrative Review', 'Scoping Review'))
     , pctExpression=pctExpression)
   
-  callModule(mappingDataMD, "mapByReviewObjective", data, 'Review objective', trees, list(
+  callModule(mappingDataMD, "mapByReviewObjective", data(), 'Review objective', trees, list(
     filterValues = c('ROs about gamification', 'ROs about the game-related approaches'
                      , 'ROs about models/frameworks related to gamification'
                      , 'ROs about the gamification analytics')
     , removeDuplicateSort = c())
     , pctExpression=pctExpression)
   
-  callModule(mappingDataMD, "mapByReviewQuestion", data, 'Review question', trees, list(
+  callModule(mappingDataMD, "mapByReviewQuestion", data(), 'Review question', trees, list(
     filterValues = c('RQs about the gamification','RQs about the game-related approaches'
                      , 'RQs about the gamification models/frameworks'
                      , 'RQs about the gamification analytics')
     , removeDuplicateSort = c())
     , pctExpression=pctExpression)
   
-  callModule(mappingDataMD, "mapByTypeSelectedStudy", data, 'Type of selected studies', trees, list(
+  callModule(mappingDataMD, "mapByTypeSelectedStudy", data(), 'Type of selected studies', trees, list(
     filterValues = c('empirical', 'non-empirical', 'empirical + non-empirical')
     , removeDuplicateSort = c('empirical + non-empirical', 'empirical', 'non-empirical'))
     , pctExpression=pctExpression)
   
-  callModule(mappingDataMD, "mapByItemType", data, 'itemType', trees, pctExpression=pctExpression)
+  callModule(mappingDataMD, "mapByItemType", data(), 'itemType', trees, pctExpression=pctExpression)
   
   ##
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByPubVenue", data, 'Paper type', trees
+  callModule(mappingDataMD, "mapNumSelectedStudiesByPubVenue", data(), 'Paper type', trees
              , list(filterValues = c('Journal article'
                                      , 'Conference (full-paper)', 'Conference (book chapter)'
                                      , 'Workshop', 'Workshop (book chapter)', 'Book chapter'))
              , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByContext", data, 'Context', trees, list(
+  callModule(mappingDataMD, "mapNumSelectedStudiesByContext", data(), 'Context', trees, list(
     filterValues = c('Education', 'Business, Marketing, Enterprise and Services'
                      , 'Software Engineering', 'Information Systems', 'Crowsourcing'
                      , 'Health', 'Education + Business, Marketing, Enterprise and Services'
@@ -227,39 +228,39 @@ server <- function(input, output, session) {
                               , 'Without context'))
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewType", data, 'Review type', trees, list(
+  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewType", data(), 'Review type', trees, list(
     filterValues = c('Mapping Review', 'Aggregative Review', 'Systematic Review', 'Meta-analysis'
                      , 'Narrative Review', 'Scoping Review', 'Critical Review')
     , removeDuplicateSort = c('Systematic Review', 'Meta-analysis', 'Aggregative Review'
                               , 'Critical Review', 'Mapping Review', 'Narrative Review', 'Scoping Review'))
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewObjective", data, 'Review objective', trees, list(
+  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewObjective", data(), 'Review objective', trees, list(
     filterValues = c('ROs about gamification', 'ROs about the game-related approaches'
                      , 'ROs about models/frameworks related to gamification'
                      , 'ROs about the gamification analytics')
     , removeDuplicateSort = c())
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewQuestion", data, 'Review question', trees, list(
+  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewQuestion", data(), 'Review question', trees, list(
     filterValues = c('RQs about the gamification','RQs about the game-related approaches'
                      , 'RQs about the gamification models/frameworks'
                      , 'RQs about the gamification analytics')
     , removeDuplicateSort = c())
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByTypeSelectedStudy", data, 'Type of selected studies', trees, list(
+  callModule(mappingDataMD, "mapNumSelectedStudiesByTypeSelectedStudy", data(), 'Type of selected studies', trees, list(
     filterValues = c('empirical', 'non-empirical', 'empirical + non-empirical')
     , removeDuplicateSort = c('empirical + non-empirical', 'empirical', 'non-empirical'))
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByItemType", data, 'itemType', trees
+  callModule(mappingDataMD, "mapNumSelectedStudiesByItemType", data(), 'itemType', trees
              , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
   ##
   
   output$pivotTable <- renderRpivotTable({
-	rpivotTable(data=data, rendererName="Table", rows='Context')
+	rpivotTable(data=data());
   })
   
 }
