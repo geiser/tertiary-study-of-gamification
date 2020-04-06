@@ -56,7 +56,7 @@ ui <- navbarPage(
     #, mappingDataUI('mapNumSelectedStudiesByPublicationTitle', 'number of selected studies by item types'
     #                , 'Mapping number of selected studies by publication titles (conf/journal where was published)')
     
-    , " ", " ", tabPanel('explore by yourself', h3('Explore mapping by yourself'),  uiOutput('pivotPanel'))
+    , " ", " ", tabPanel('explore by yourself', h3('Explore mapping by yourself'),  rpivotTableOutput('pivotTable', width = "100%"))
   )
 )
 
@@ -258,16 +258,8 @@ server <- function(input, output, session) {
   
   ##
   
-  output$pivotPanel <- renderUI({
-	withProgress(message = 'Rendering in progress', {
-		vl <- verticalLayout(
-			fluidRow(
-				span("- To obtain more help about how to use pivottable in R, Click here: ")
-				, a(href='https://pivottable.js.org/', 'https://pivottable.js.org/'))
-			, rpivotTable(data=data, rendererName="Table", rows='Context', , width="100%")
-		)
-	})
-    return(vl) 
+  output$pivotTable <- renderRpivotTable({
+	rpivotTable(data=data, rendererName="Table", rows='Context')
   })
   
 }
