@@ -40,13 +40,10 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
 RUN install2.r Hmisc
 
 # Install packages to front-end
-RUN install2.r -s DT \
-    && install2.r -s shinyTree \
-    && install2.r -s rpivotTable
-
 RUN install2.r -s RColorBrewer 
-
-RUN R -e "# devtools::install_github(c('ramnathv/htmlwidgets', 'smartinsightsfromdata/rpivotTable'))" 
+RUN install2.r -s DT \
+    && install2.r -s shinyTree
+RUN R -e "devtools::install_github(c('ramnathv/htmlwidgets', 'smartinsightsfromdata/rpivotTable'))" 
 
 #RUN install2.r -s bibliometrix
 
