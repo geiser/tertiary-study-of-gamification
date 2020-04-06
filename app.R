@@ -255,14 +255,17 @@ server <- function(input, output, session) {
   ##
   
   output$pivotPanel <- renderUI({
-    withProgress(message = 'Loading pivotal table', detail = 'This may take a while ...', {
+    
       verticalLayout(
         fluidRow(
           span("- To obtain more help about how to use pivottable in R, Click here: ")
           , a(href='https://pivottable.js.org/', 'https://pivottable.js.org/'))
-        , rpivotTable(data=data(), rendererName="Table", width="100%")
+        , 
+		withProgress(message = 'Loading pivotal table', detail = 'This may take a while ...', {
+		rpivotTable(data=data(), rendererName="Table", width="100%")
+		})
       )
-    })
+    
   })
   
 }
