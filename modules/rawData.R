@@ -47,7 +47,7 @@ rawDataMD <- function(input, output, session, data) {
   })
   
   output$annotationsDT <- DT::renderDataTable({
-    df2DT(data$annotations[,c('ID','field','value','key','itemID')])
+    df2DT(data$annotations[,c('ID','field','value','key','itemID')], pageLength = 50)
   })
   
   output$classificationByContextDT <- DT::renderDataTable({

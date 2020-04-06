@@ -43,9 +43,12 @@ RUN install2.r Hmisc
 RUN install2.r -s RColorBrewer 
 RUN install2.r -s DT \
     && install2.r -s shinyTree
-RUN R -e "devtools::install_github(c('ramnathv/htmlwidgets', 'smartinsightsfromdata/rpivotTable'))" 
+
+
+RUN R -e "devtools::install_github(c('ramnathv/htmlwidgets', 'smartinsightsfromdata/rpivotTable'))"
 
 #RUN install2.r -s bibliometrix
 
 # Making executable
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
+

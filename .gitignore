@@ -28,6 +28,7 @@ shiny_logs/*
 
 # RStudio files
 .Rproj.user/
+R/
 
 # produced vignettes
 vignettes/*.html
