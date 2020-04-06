@@ -46,6 +46,8 @@ RUN install2.r -s DT \
 
 RUN install2.r -s RColorBrewer 
 
+RUN R -e "# devtools::install_github(c('ramnathv/htmlwidgets', 'smartinsightsfromdata/rpivotTable'))" 
+
 #RUN install2.r -s bibliometrix
 
 # Making executable
