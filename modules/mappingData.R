@@ -101,7 +101,7 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
     if (input$selectedTabPanel == 'pivot' || input$selectedTabPanel == 'latex') {
       vlayout <- verticalLayout(
         selectInput(ns("selectedRefsFrom"), "Use 'refs' as", choices=colnames(data), selected='title')
-        , checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=T)
+        , checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
         , uiOutput(ns('avoidDuplicatePanel'))
         , vlayout
       )
