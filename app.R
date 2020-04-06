@@ -259,12 +259,15 @@ server <- function(input, output, session) {
   ##
   
   output$pivotPanel <- renderUI({
-      verticalLayout(
-        fluidRow(
-          span("- To obtain more help about how to use pivottable in R, Click here: ")
-          , a(href='https://pivottable.js.org/', 'https://pivottable.js.org/'))
-        , rpivotTable(data=data, rendererName="Table", width="100%")
-      )
+	withProgress(message = 'Rendering in progress', {
+		vl <- verticalLayout(
+			fluidRow(
+				span("- To obtain more help about how to use pivottable in R, Click here: ")
+				, a(href='https://pivottable.js.org/', 'https://pivottable.js.org/'))
+			, rpivotTable(data=data, rendererName="Table", width="100%")
+		)
+	})
+    return(vl) 
   })
   
 }
