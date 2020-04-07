@@ -5,13 +5,10 @@ lineMapping <- function(cdf, items, numericField=NULL, x='val', width=800, heigh
                             , legendposition='inside', plotYMin=0, plotYMax=50) {
   library(RColorBrewer)  
   
-  colors <- unique(c('#E6194B', '#3CB44B', '#FFE119', '#4363D8', '#F58231'
-                     , '#911EB4', '#42D4F4', '#F032E6', '#BFEF45', '#FABEBE'
-                     , '#469990', '#E6BEFF', '#9A6324', '#800000', '#AAFFC3'
-                     , '#808000', '#FFD8B1', '#000075', '#A9A9A9'
-                     , brewer.pal(8, 'Dark2'), brewer.pal(9, 'Pastel1'), brewer.pal(8,'Accent')
-                     , brewer.pal(9, 'Set1'), brewer.pal(8, 'Pastel2'), brewer.pal(8, 'Set2')
-                     , brewer.pal(12, 'Paired'), brewer.pal(12, 'Set3')))
+  colors <- unique(c(brewer.pal(9, 'Set1')[-1], brewer.pal(8, 'Dark2')
+                     , brewer.pal(10, 'Set3'),  brewer.pal(8,'Accent')
+                     , brewer.pal(9, 'Pastel1'), brewer.pal(8, 'Pastel2')
+                     , brewer.pal(8, 'Set2')))
   
   msymbols <- c('circle', 'square', 'diamond', 'cross', 'x', 'triangle-up', 'pentagon'
                 , 'star', 'hexagram', 'circle-open-dot', 'square-open-dot', 'diamond-open-dot'

@@ -4,13 +4,11 @@ barMapping <- function(cdf, items, numericField=NULL, x='val', width=800, height
                      , legendposition='inside', barmode = 'group', plotYMin=0, plotYMax=50) {
   library(RColorBrewer)
   
-  colors <- unique(c('#E6194B', '#3CB44B', '#FFE119', '#4363D8', '#F58231'
-                     , '#911EB4', '#42D4F4', '#F032E6', '#BFEF45', '#FABEBE'
-                     , '#469990', '#E6BEFF', '#9A6324', '#800000', '#AAFFC3'
-                     , '#808000', '#FFD8B1', '#000075', '#A9A9A9'
-                     , brewer.pal(8, 'Dark2'), brewer.pal(9, 'Pastel1'), brewer.pal(8,'Accent')
-                     , brewer.pal(9, 'Set1'), brewer.pal(8, 'Pastel2'), brewer.pal(8, 'Set2')
-                     , brewer.pal(12, 'Paired'), brewer.pal(12, 'Set3')))
+  colors <- unique(c(brewer.pal(9, 'Set1')[-1], brewer.pal(8, 'Dark2')
+                     , brewer.pal(10, 'Set3'),  brewer.pal(8,'Accent')
+                     , brewer.pal(9, 'Pastel1'), brewer.pal(8, 'Pastel2')
+                     , brewer.pal(8, 'Set2')))
+  dashs <- c("solid", "dot", "dash", "longdash", "dashdot", "longdashdot")
   
   c_count <- 0
   y_acc <- rep(0, length(x))
@@ -19,6 +17,7 @@ barMapping <- function(cdf, items, numericField=NULL, x='val', width=800, height
   for (item in items) { 
     c_count <- c_count+1
     tdf <- cdf[(cdf$ColumnLevel01 %in% x) & cdf$RowLevel01 == item,]
+    
     if (isShortedLegend) {
       item <- stringr::str_replace_all(pattern_name, "\\#", as.character(c_count))
     }
@@ -38,7 +37,9 @@ barMapping <- function(cdf, items, numericField=NULL, x='val', width=800, height
     
     text <- y; text[y == 0] <- NA;
     color <- colors[c_count %% length(colors)]
-    fig <- add_trace(fig, x=x, y=y, text=text, name=item, marker=list(color=color)
+    dash <- dashs[c_count %% length(dashs)]
+    fig <- add_trace(fig, x=x, y=y, text=text, name=item
+                     , marker=list(color=color, line=list(width=1, color='black', dash=dash)) 
                      , textposition=textposition, textfont=list(size=plotfontsize))
   }
   
