@@ -21,9 +21,10 @@ mappingDataUI <- function(id, label="", title=label) {
         , tabPanel("Data table", DT::DTOutput(ns("sourceDT")), value="data")
         , tabPanel("Pivot table", DT::DTOutput(ns("pivotDT")), value="pivot")
         , tabPanel("Charts", verticalLayout(
-			radioButtons(ns('chartType'), 'Chart type', choices = c('pie', 'stacked-bar', 'bar', 'line'), selected = 'pie', inline = T)
-			, flowLayout(actionButton(ns("doPlot"), "Plot"), actionButton(ns("doClear"), "Clear"))
-			, plotlyOutput(ns("plotlyChart"))), value = "charts")
+          radioButtons(ns('chartType'), 'Chart type', choices = c('pie', 'stacked-bar', 'bar', 'line'), selected = 'pie', inline = T)
+          , flowLayout(actionButton(ns("doPlot"), "Plot"), actionButton(ns("doClear"), "Clear"))
+          , plotlyOutput(ns("plotlyChart")))
+          , value = "charts")
         , tabPanel("Latex table", verbatimTextOutput(ns("latexDT")), value="latex")
       ))
     )
@@ -184,7 +185,10 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
   output$selectDataGroupPanel <- renderUI({
     if (input$isDataGroup) {
       if (input$dataGroupField %in% names(shinyTrees)) {
-        verticalLayout(span("Values for groupping"), shinyTree(ns("dataGroupValueTree"), checkbox = TRUE))
+        verticalLayout(
+          uiOutput(ns("treeShinySelectedPanel"))
+          , checkboxInput(ns('isSelectedInputUsed'), 'Is selected input used?', value=F)
+        )
       } else {
         choices <- sort(unique(data[[input$dataGroupField]]))
         selectInput(ns("dataGroupValue"), "Values for groupping", choices=choices, selected=choices, multiple=T)
@@ -192,9 +196,22 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
     }
   })
   
+  output$treeShinySelectedPanel <- renderUI({
+    if (input$isSelectedInputUsed) {
+      choices <- sort(unique(data[[input$dataGroupField]]))
+      selectInput(ns("dataGroupValue"), "Values for groupping", choices=choices, selected=choices, multiple=T)
+    } else {
+      verticalLayout(span("Values for groupping"), shinyTree(ns("dataGroupValueTree"), checkbox = TRUE))
+    }
+  })
+  
   groupValues <- reactive({
     if (input$dataGroupField %in% names(shinyTrees)) {
-      toReturn <- get_selected(input$dataGroupValueTree)
+      if (input$isSelectedInputUsed) {
+        toReturn <- input$dataGroupValue
+      } else {
+        toReturn <- get_selected(input$dataGroupValueTree)
+      }
     } else {
       toReturn <- input$dataGroupValue
     }
