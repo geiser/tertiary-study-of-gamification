@@ -44,8 +44,8 @@ echo "" >> Makefile
 echo "PREFIX = $prefix" >> Makefile
 echo "APP_NAME = $app" >> Makefile
 echo "" >> Makefile
-echo "DD = $(which docker)" >> Makefile
-echo "DC = $(which docker-compose)" >> Makefile
+echo "DD = \"$(which docker)\"" >> Makefile
+echo "DC = \"$(which docker-compose)\"" >> Makefile
 echo "" >> Makefile
 cat Makefile.in >> Makefile
 echo 'configuration complete, type make to build.'

@@ -1,4 +1,4 @@
-
+library(rpivotTable)
 library(shiny)
 library(plotly)
 library(shinyTree)
@@ -10,7 +10,7 @@ source('lib/df2DT.R')
 source('lib/initValue.R')
 source('modules/rawData.R')
 source('modules/mappingData.R')
-
+source('modules/mappingNumSelectedStudies.R')
 
 source('lib/addAnnotations.R')
 source('lib/addClassification.R')
@@ -94,8 +94,8 @@ ui <- navbarPage(
     , objective = 'https://bit.ly/343i2rX', question = 'https://bit.ly/39FElVA'))
     , tabPanel("Processed data", DT::DTOutput("dataDT")))
   , navbarMenu(
-    title = "Mapping ..."
-    , " ", " ", "Basic mapping"
+    title = "Mapping"
+    , " ", " ", "Basic mapping of systematic studies by ..."
     , mappingDataUI('mapByPubVenue', 'publication venues', 'Mapping by publication venues')
     , mappingDataUI('mapByContext', 'contexts', 'Mapping by contexts')
     , mappingDataUI('mapByReviewType', 'review types', 'Mapping by review types')
@@ -105,20 +105,20 @@ ui <- navbarPage(
     , mappingDataUI('mapByItemType', 'item types (Zotero)', 'Mapping by item types (based on Zotero)')
     #, mappingDataUI('mapByPublicationTitle', 'publication title', 'Mapping by publication titles (conf/journal where was published)')
     
-    , " ", " ", "Mapping number of selected studies"
-    , mappingDataUI('mapNumSelectedStudiesByContext', 'number of selected studies by contexts'
-                    , 'Mapping number of selected studies by contexts')
-    , mappingDataUI('mapNumSelectedStudiesByReviewType', 'number of selected studies by review types'
-                    , 'Mapping number of selected studies by review types')
-    , mappingDataUI('mapNumSelectedStudiesByReviewObjective', 'number of selected studies by review objectives'
-                    , 'Mapping number of selected studies by review objectives')
-    , mappingDataUI('mapNumSelectedStudiesByReviewQuestion', 'number of selected studies by review questions'
-                    , 'Mapping number of selected studies by review questions')
-    , mappingDataUI('mapNumSelectedStudiesByTypeSelectedStudy', 'number of selected studies by type of selected studies'
-                    , 'Mapping number of selected studies by type of selected studies')
-    , mappingDataUI('mapNumSelectedStudiesByItemType', 'number of selected studies by item types (Zotero)'
-                    , 'Mapping number of selected studies by item types (based on Zotero)')
-    #, mappingDataUI('mapNumSelectedStudiesByPublicationTitle', 'number of selected studies by item types'
+    , " ", " ", "Mapping the number of selected primary studies by ..."
+    , mappingNumSelectedStudiesUI('mapNumSelectedStudiesByContext', 'contexts'
+                    , 'Mapping the number of selected primary studies by contexts')
+    , mappingNumSelectedStudiesUI('mapNumSelectedStudiesByReviewType', 'review types'
+                    , 'Mapping the number of selected primary studies by review types')
+    , mappingNumSelectedStudiesUI('mapNumSelectedStudiesByReviewObjective', 'review objectives'
+                    , 'Mapping the number of selected primary studies by review objectives')
+    , mappingNumSelectedStudiesUI('mapNumSelectedStudiesByReviewQuestion', 'review questions'
+                    , 'Mapping the number of selected primary studies by review questions')
+    , mappingNumSelectedStudiesUI('mapNumSelectedStudiesByTypeSelectedStudy', 'types of selected studies'
+                    , 'Mapping the number of selected primary studies by types of selected studies')
+    , mappingNumSelectedStudiesUI('mapNumSelectedStudiesByItemType', 'item types (Zotero)'
+                    , 'Mapping the number of selected primary studies by item types (based on Zotero)')
+    #, mappingNumSelectedStudiesUI('mapNumSelectedStudiesByPublicationTitle', 'number of selected studies by item types'
     #                , 'Mapping number of selected studies by publication titles (conf/journal where was published)')
     
     , " ", " ", tabPanel('explore by yourself', uiOutput('explorePanel'))
@@ -207,13 +207,13 @@ server <- function(input, output, session) {
   
   ##
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByPubVenue", data$df, 'Paper type', trees
+  callModule(mappingNumSelectedStudiesMD, "mapNumSelectedStudiesByPubVenue", data$df, 'Paper type', trees
              , list(filterValues = c('Journal article'
                                      , 'Conference (full-paper)', 'Conference (book chapter)'
                                      , 'Workshop', 'Workshop (book chapter)', 'Book chapter'))
              , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByContext", data$df, 'Context', trees, list(
+  callModule(mappingNumSelectedStudiesMD, "mapNumSelectedStudiesByContext", data$df, 'Context', trees, list(
     filterValues = c('Education', 'Business, Marketing, Enterprise and Services'
                      , 'Software Engineering', 'Information Systems', 'Crowsourcing'
                      , 'Health', 'Education + Business, Marketing, Enterprise and Services'
@@ -232,33 +232,33 @@ server <- function(input, output, session) {
                               , 'Without context'))
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewType", data$df, 'Review type', trees, list(
+  callModule(mappingNumSelectedStudiesMD, "mapNumSelectedStudiesByReviewType", data$df, 'Review type', trees, list(
     filterValues = c('Mapping Review', 'Aggregative Review', 'Systematic Review', 'Meta-analysis'
                      , 'Narrative Review', 'Scoping Review', 'Critical Review')
     , removeDuplicateSort = c('Systematic Review', 'Meta-analysis', 'Aggregative Review'
                               , 'Critical Review', 'Mapping Review', 'Narrative Review', 'Scoping Review'))
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewObjective", data$df, 'Review objective', trees, list(
+  callModule(mappingNumSelectedStudiesMD, "mapNumSelectedStudiesByReviewObjective", data$df, 'Review objective', trees, list(
     filterValues = c('ROs about gamification', 'ROs about the game-related approaches'
                      , 'ROs about models/frameworks related to gamification'
                      , 'ROs about the gamification analytics')
     , removeDuplicateSort = c())
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByReviewQuestion", data$df, 'Review question', trees, list(
+  callModule(mappingNumSelectedStudiesMD, "mapNumSelectedStudiesByReviewQuestion", data$df, 'Review question', trees, list(
     filterValues = c('RQs about the gamification','RQs about the game-related approaches'
                      , 'RQs about the gamification models/frameworks'
                      , 'RQs about the gamification analytics')
     , removeDuplicateSort = c())
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByTypeSelectedStudy", data$df, 'Type of selected studies', trees, list(
+  callModule(mappingNumSelectedStudiesMD, "mapNumSelectedStudiesByTypeSelectedStudy", data$df, 'Type of selected studies', trees, list(
     filterValues = c('empirical', 'non-empirical', 'empirical + non-empirical')
     , removeDuplicateSort = c('empirical + non-empirical', 'empirical', 'non-empirical'))
     , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
-  callModule(mappingDataMD, "mapNumSelectedStudiesByItemType", data$df, 'itemType', trees
+  callModule(mappingNumSelectedStudiesMD, "mapNumSelectedStudiesByItemType", data$df, 'itemType', trees
              , pctExpression=pctExpression, numericField = 'Number of selected studies')
   
   ##

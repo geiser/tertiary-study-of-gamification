@@ -11,3 +11,10 @@ services:
     volumes:
       - '.:/srv/shiny-server/tertiary-study-of-gamification'
       - './shiny_logs:/var/log/shiny-server'
+  dev:
+    image: geiser/r-studio:latest
+    container_name: tertiary-study-of-gamification_dev
+    ports:
+      - "8787:8787"
+    volumes:
+      - '.:/home/gcc'

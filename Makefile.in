@@ -110,7 +110,7 @@ endif
 # Development environment
 dev: ## Start r-server in http://127.0.0.0.1:8787/ to continue with the development
 	@$(DD) pull geiser/r-studio:latest
-	$(DD) run -i -t --rm --name="$(APP_NAME)_dev" -p=8787:8787 -v $(shell pwd):/home/gcc geiser/r-studio:latest
+	$(DC) -p $(APP_NAME) up --no-build -d dev
 	
 # HELPERS
 prune: ## clean all that is not actively used

@@ -1,16 +1,38 @@
-
 if (!require(rpivotTable)){ install.packages('rpivotTable') }
+
 library(rpivotTable)
 library(pivottabler)
 library(plotly)
 library(RColorBrewer)
+library(rstatix)
+
+
+q1 <- function(x) { return(quantile(x, na.rm=T)[2]) }
+q3 <- function(x) { return(quantile(x, na.rm=T)[4]) }
+
+getOutliers <- function (data, dvs, ivs) {
+  library(rstatix)
+  library(dplyr)
+  dat <- data
+  for (iv in ivs) {
+    if (is.numeric(dat[[iv]])) {
+      dat[[iv]] <- sapply(dat[[iv]], FUN = as.character)
+    }
+  }
+  dat <- group_by_at(dat, vars(ivs))
+  do.call(rbind, lapply(dvs, FUN = function(dv) {
+    outliers <- identify_outliers(dat, variable = dv)
+    if (nrow(outliers) > 0) {
+      return(cbind(var = dv, outliers))
+    }
+  }))
+}
 
 source(paste0(getwd(),'/lib/df2DT.R'))
 source(paste0(getwd(),'/lib/barMapping.R'))
 source(paste0(getwd(),'/lib/lineMapping.R'))
 
-
-mappingDataUI <- function(id, label="", title=label) {
+mappingNumSelectedStudiesUI <- function(id, label="", title=label) {
   ns <- NS(id)
   tabPanel(
     label, h3(title)
@@ -31,7 +53,7 @@ mappingDataUI <- function(id, label="", title=label) {
   )
 }
 
-mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = list()
+mappingNumSelectedStudiesMD <- function(input, output, session, data, mainField, shinyTrees = list()
                           , def.param = list(filterField = 'Context', groupField = 'Context')
                           , pctExpression = NULL, numericField = NULL) {
   
@@ -46,6 +68,8 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
     }
     selectInput(ns("selectedFilterBy"), 'Show/Display Data', choices=choices, selected=selected, multiple=T)
   })
+  
+  
   
   output$dataFilterPanel <- renderUI({
     if (input$isDataFilter) {
@@ -77,9 +101,11 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
     }
     if (input$isDataFilter && !is.null(input$dataFilterField) && !is.na(input$dataFilterField)) {
       columns <- c(columns, input$dataFilterField)
-      if (length(input$dataFilterValue) > 0)
+      if (length(input$dataFilterValue) > 0) {
         dr <- dr[dr[[input$dataFilterField]] %in% input$dataFilterValue,]
+      }
     }
+    
     unique(dr[,columns])
   })
   
@@ -89,6 +115,44 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
   
   ## control panel UI
   
+  output$outliersPanel <- renderUI({
+    if (input$selectedTabPanel != 'data'){
+      choices <- unique(data[[input$selectedRefsFrom]])
+      verticalLayout(
+        selectInput(ns("outliers"), "Outliers", choices=choices, multiple = T),
+        actionLink(ns("identifyingExtremeOutliers"), "Identifying extreme outliers"),
+        actionLink(ns("identifyingOutliers"), "Identifying outliers")
+      )
+    }
+  })
+  
+  
+  observeEvent(input$identifyingExtremeOutliers, {
+    dat <- merge(df(), data[,c("key", input$selectedRefsFrom)], by = "key")
+    
+    ivs <- c(mainField)
+    if (input$isDataGroup && !is.null(input$dataGroupField)) {
+      ivs <- c(ivs, input$dataGroupField)
+      dat <- merge(dat, data[,c('key', input$dataGroupField)], key = 'key')
+    }
+    outliers <- unique(getOutliers(dat, numericField, ivs))
+    outliers <- outliers[[input$selectedRefsFrom]][which(outliers$is.extreme)]
+    updateSelectInput(session, "outliers", selected = unique(outliers))
+  })
+  
+  observeEvent(input$identifyingOutliers, {
+    dat <- merge(df(), data[,c("key", input$selectedRefsFrom)], by = "key")
+    
+    ivs <- c(mainField)
+    if (input$isDataGroup && !is.null(input$dataGroupField)) {
+      ivs <- c(ivs, input$dataGroupField)
+      dat <- merge(dat, data[,c('key', input$dataGroupField)], key = 'key')
+    }
+    outliers <- unique(getOutliers(dat, numericField, ivs))
+    outliers <- outliers[[input$selectedRefsFrom]][which(outliers$is.outlier)]
+    updateSelectInput(session, "outliers", selected = unique(outliers))
+  })
+  
   output$optionPanel <- renderUI({
     
     vlayout <- verticalLayout(
@@ -96,15 +160,15 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
       , uiOutput(ns('dataFilterPanel'))
     )
     
-    if (input$selectedTabPanel == 'charts') {
-      vlayout <- verticalLayout(
-        checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
-        , uiOutput(ns('avoidDuplicatePanel'))
-        , vlayout
-      )
-    }
+    #if (input$selectedTabPanel == 'charts') {
+    #  vlayout <- verticalLayout(
+    #    checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
+    #    , uiOutput(ns('avoidDuplicatePanel'))
+    #    , vlayout
+    #  )
+    #}
     
-    if (input$selectedTabPanel == 'pivot' || input$selectedTabPanel == 'latex') {
+    if (input$selectedTabPanel != 'data') {
       vlayout <- verticalLayout(
         selectInput(ns("selectedRefsFrom"), "Use 'refs' as", choices=colnames(data), selected='citekey')
         , checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
@@ -112,10 +176,14 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
         , vlayout
       )
     }
-    if (!is.null(numericField)) {
-      exp_choices <- c('median(#, na.rm=T)','mean(#, na.rm=T)','min(#, na.rm=T)','max(#, na.rm=T)','sum(#, na.rm=T)')
+    
+    
+    if (!is.null(numericField) && input$selectedTabPanel != 'data') {
+      exp_choices <- c('median(#, na.rm=T)','mean(#, na.rm=T)','min(#, na.rm=T)','max(#, na.rm=T)'
+                       ,'sum(#, na.rm=T)','q1(#)','q3(#)','mad(#, na.rm=T)','sd(#, na.rm=T)')
+      multiple <- (input$selectedTabPanel != 'charts')
       vlayout <- verticalLayout(
-        selectInput(ns("summariseExpression"), "Summarise expression", choices = exp_choices, multiple = F)
+        selectInput(ns("summariseExpression"), "Summarise expression", choices = exp_choices, multiple = multiple, selected = exp_choices[1])
         , vlayout
       )
     }
@@ -124,6 +192,7 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
       vlayout
       , checkboxInput(ns('isDataGroup'), 'Is the data grouped?', value=F)
       , uiOutput(ns('dataGroupPanel'))
+      , uiOutput(ns("outliersPanel"))
     )
     
     if (input$selectedTabPanel == 'charts') {
@@ -224,9 +293,15 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
   output$dataGroupValueTree <- renderTree({ shinyTrees[[input$dataGroupField]] })
   
   pivotDf <- reactive({
+    selectedRefsFrom <- 'key'
+    if (length(input$selectedRefsFrom) > 0) {
+      selectedRefsFrom <- input$selectedRefsFrom
+    }
     dr <- data[data$key %in% df()$key,]
     dr <- dr[dr[[mainField]] %in% input$selectedFilterBy,]
-    columns <- c('key', mainField, input$selectedRefsFrom)
+    dr <- dr[!dr[[selectedRefsFrom]] %in% input$outliers,]
+    
+    columns <- c('key', mainField, selectedRefsFrom)
     if (!is.null(numericField)) columns <- c(columns, numericField)
     
     ##
@@ -245,10 +320,10 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
       columns <- c(columns, input$dataGroupField)
       dr <- dr[dr[[input$dataGroupField]] %in% groupValues(),]
     }
-    if (input$selectedRefsFrom == 'citekey' || input$selectedRefsFrom == 'citationKey') {
-      dr[[input$selectedRefsFrom]] <- paste0('\\cite{', dr[[input$selectedRefsFrom]] ,'}')
+    if (selectedRefsFrom == 'citekey' || selectedRefsFrom == 'citationKey') {
+      dr[[selectedRefsFrom]] <- paste0('\\cite{', dr[[selectedRefsFrom]] ,'}')
     }
-    refsExpression <- paste0("paste(", input$selectedRefsFrom, ", collapse='; ')")
+    refsExpression <- paste0("paste(", selectedRefsFrom, ", collapse='; ')")
     dr <- unique(dr[,columns])
     
     pt <- PivotTable$new()
@@ -264,8 +339,13 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
       pt$defineCalculation(calculationName="pct", type="calculation", basedOn=c("val")
                            , format="%.2f %%", calculationExpression=pctExpression)
     } else {
-      summariseExpression = stringr::str_replace(input$summariseExpression, "\\#", paste0('`',numericField,'`'))
-      pt$defineCalculation(calculationName="val", format="%.2f", summariseExpression=summariseExpression)
+      pt$defineCalculation(calculationName="n", summariseExpression="n()")
+      for (sumExpression in input$summariseExpression) {
+        sumExpression <- stringr::str_replace(sumExpression, "\\#", paste0('`',numericField,'`'))
+        pstr <- stringr::str_replace_all(sumExpression, "[^[:alnum:]]", " ")
+        calcName <- stringr::str_split(pstr, " ")[[1]][1]
+        pt$defineCalculation(calculationName=calcName, format="%.2f", summariseExpression=sumExpression)
+      } 
     }
     pt$evaluatePivot()
     
@@ -298,6 +378,8 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
   observeEvent(input$doPlot, {
     dr <- data[data$key %in% df()$key,]
     dr <- dr[dr[[mainField]] %in% input$selectedFilterBy,]
+    dr <- dr[!dr[[input$selectedRefsFrom]] %in% input$outliers,]
+    
     columns <- c('key', mainField)
     if (!is.null(numericField)) columns <- c(columns, numericField)
     
