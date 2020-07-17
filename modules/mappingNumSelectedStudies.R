@@ -7,6 +7,35 @@ library(RColorBrewer)
 library(rstatix)
 
 
+
+duplicatedCitekey <- unique(c("HernandezMoreno2019",
+                              "Larson2019",
+                              "SilvaRodriguesLeal2019",
+                              "PeixotoSilva2017",
+                              "SouzaVeadoMoreiraFigueiredoCosta2017", 
+                              "AlhammadMoreno2018",
+                              "SouzaVeadoMoreiraFigueiredoCosta2018",
+                              "OsatuyiOsatuyiDeLaRosa2018",
+                              "LimaDavis2018",
+                              "GentryGauthierEhrstromWortleyLilienthalCarDauwels-OkutsuNikolaouZaryCampbellCar2019",
+                              "SantosSa-CoutoVieira-Marques2019", 
+                              "MagistaDorraPean2018",
+                              "DosSantosStradaBottino2019",
+                              "HernandezMoreno2019",
+                              "Larson2019",
+                              "SilvaRodriguesLeal2019",
+                              "PeixotoSilva2017",
+                              "SouzaVeadoMoreiraFigueiredoCosta2017",
+                              "AlhammadMoreno2018",
+                              "SouzaVeadoMoreiraFigueiredoCosta2018",
+                              "OsatuyiOsatuyiDeLaRosa2018",
+                              "LimaDavis2018",
+                              "GentryGauthierEhrstromWortleyLilienthalCarDauwels-OkutsuNikolaouZaryCampbellCar2019",
+                              "SantosSa-CoutoVieira-Marques2019", 
+                              "MagistaDorraPean2018",
+                              "DosSantosStradaBottino2019"))
+
+
 q1 <- function(x) { return(quantile(x, na.rm=T)[2]) }
 q3 <- function(x) { return(quantile(x, na.rm=T)[4]) }
 
@@ -192,6 +221,7 @@ mappingNumSelectedStudiesMD <- function(input, output, session, data, mainField,
       vlayout
       , checkboxInput(ns('isDataGroup'), 'Is the data grouped?', value=F)
       , uiOutput(ns('dataGroupPanel'))
+      , checkboxInput(ns('isGroupByDate'), 'Is the data also grouped by data?', value=F)
       , uiOutput(ns("outliersPanel"))
     )
     
@@ -293,15 +323,17 @@ mappingNumSelectedStudiesMD <- function(input, output, session, data, mainField,
   output$dataGroupValueTree <- renderTree({ shinyTrees[[input$dataGroupField]] })
   
   pivotDf <- reactive({
+    library(data.table)
     selectedRefsFrom <- 'key'
     if (length(input$selectedRefsFrom) > 0) {
       selectedRefsFrom <- input$selectedRefsFrom
     }
-    dr <- data[data$key %in% df()$key,]
+    dat <- setorderv(data, cols = c("date","citekey"), c(1,1))
+    dr <- dat[dat$key %in% df()$key,]
     dr <- dr[dr[[mainField]] %in% input$selectedFilterBy,]
     dr <- dr[!dr[[selectedRefsFrom]] %in% input$outliers,]
     
-    columns <- c('key', mainField, selectedRefsFrom)
+    columns <- c('key', mainField, selectedRefsFrom, 'date')
     if (!is.null(numericField)) columns <- c(columns, numericField)
     
     ##
@@ -321,16 +353,27 @@ mappingNumSelectedStudiesMD <- function(input, output, session, data, mainField,
       dr <- dr[dr[[input$dataGroupField]] %in% groupValues(),]
     }
     if (selectedRefsFrom == 'citekey' || selectedRefsFrom == 'citationKey') {
-      dr[[selectedRefsFrom]] <- paste0('\\cite{', dr[[selectedRefsFrom]] ,'}')
+      dr_selectedRefsFrom <- as.vector(sapply(dr[[selectedRefsFrom]], FUN = function(ref) {
+        paste0('\\cite{', ref ,'}', ifelse(ref %in% duplicatedCitekey, "*", ""), ";")
+      }))
+      dr[[selectedRefsFrom]] <- dr_selectedRefsFrom 
     }
-    refsExpression <- paste0("paste(", selectedRefsFrom, ", collapse='; ')")
+    if (selectedRefsFrom != 'citekey' && selectedRefsFrom != 'citationKey') {
+      refsExpression <- paste0("paste(", selectedRefsFrom, ", collapse='; ')")
+    } else {
+      refsExpression <- paste0("paste(", selectedRefsFrom, ", collapse=' ')")
+    }
     dr <- unique(dr[,columns])
     
     pt <- PivotTable$new()
     pt$addData(dr)
-    pt$addRowDataGroups(mainField, addTotal=T)
+    pt$addRowDataGroups(mainField, addTotal=F)
     if (input$isDataGroup && !is.null(input$dataGroupField)) {
-      pt$addColumnDataGroups(input$dataGroupField)
+      #pt$addColumnDataGroups(input$dataGroupField, addTotal=F)
+      pt$addRowDataGroups(input$dataGroupField, addTotal=F)
+    }
+    if (input$isGroupByDate) {
+      pt$addRowDataGroups('date', addTotal=F)
     }
     pt$defineCalculation(calculationName="refs", summariseExpression=refsExpression)
     if (is.null(numericField)) {
@@ -345,20 +388,24 @@ mappingNumSelectedStudiesMD <- function(input, output, session, data, mainField,
         pstr <- stringr::str_replace_all(sumExpression, "[^[:alnum:]]", " ")
         calcName <- stringr::str_split(pstr, " ")[[1]][1]
         pt$defineCalculation(calculationName=calcName, format="%.2f", summariseExpression=sumExpression)
-      } 
+      }
     }
+
     pt$evaluatePivot()
     
-    dr <- as.data.frame(pt$asMatrix()[seq(ifelse(input$isDataGroup,3,2), nrow(pt$asMatrix())),])
-    colnames(dr) <- pt$asMatrix()[1,]
-    if (input$isDataGroup) {
-      colnames(dr) <- paste(colnames(dr), pt$asMatrix()[2,])
-    }
+    toReturn <- as.data.frame(pt$asMatrix())
+    colnames(toReturn) <- toReturn[1,]
+    toReturn[seq(2,nrow(toReturn)),]
+    #dr <- as.data.frame(pt$asMatrix()[seq(ifelse(input$isDataGroup,3,2), nrow(pt$asMatrix())),])
+    #colnames(dr) <- pt$asMatrix()[1,]
+    #if (input$isDataGroup) {
+    #  colnames(dr) <- paste(colnames(dr), pt$asMatrix()[2,])
+    #}
     
     ##
-    do.call(rbind, lapply(c(input$selectedFilterBy, 'Total'), FUN = function(x) {
-      rbind(dr[dr[[1]] == x,])
-    }))
+    #do.call(rbind, lapply(c(input$selectedFilterBy, 'Total'), FUN = function(x) {
+    #  rbind(dr[dr[[1]] == x,])
+    #}))
   })
   
   output$pivotDT <- DT::renderDataTable({

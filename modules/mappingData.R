@@ -10,6 +10,35 @@ source(paste0(getwd(),'/lib/barMapping.R'))
 source(paste0(getwd(),'/lib/lineMapping.R'))
 
 
+
+duplicatedCitekey <- unique(c("HernandezMoreno2019",
+                              "Larson2019",
+                              "SilvaRodriguesLeal2019",
+                              "PeixotoSilva2017",
+                              "SouzaVeadoMoreiraFigueiredoCosta2017", 
+                              "AlhammadMoreno2018",
+                              "SouzaVeadoMoreiraFigueiredoCosta2018",
+                              "OsatuyiOsatuyiDeLaRosa2018",
+                              "LimaDavis2018",
+                              "GentryGauthierEhrstromWortleyLilienthalCarDauwels-OkutsuNikolaouZaryCampbellCar2019",
+                              "SantosSa-CoutoVieira-Marques2019", 
+                              "MagistaDorraPean2018",
+                              "DosSantosStradaBottino2019",
+                              "HernandezMoreno2019",
+                              "Larson2019",
+                              "SilvaRodriguesLeal2019",
+                              "PeixotoSilva2017",
+                              "SouzaVeadoMoreiraFigueiredoCosta2017",
+                              "AlhammadMoreno2018",
+                              "SouzaVeadoMoreiraFigueiredoCosta2018",
+                              "OsatuyiOsatuyiDeLaRosa2018",
+                              "LimaDavis2018",
+                              "GentryGauthierEhrstromWortleyLilienthalCarDauwels-OkutsuNikolaouZaryCampbellCar2019",
+                              "SantosSa-CoutoVieira-Marques2019", 
+                              "MagistaDorraPean2018",
+                              "DosSantosStradaBottino2019"))
+
+
 mappingDataUI <- function(id, label="", title=label) {
   ns <- NS(id)
   tabPanel(
@@ -124,6 +153,7 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
       vlayout
       , checkboxInput(ns('isDataGroup'), 'Is the data grouped?', value=F)
       , uiOutput(ns('dataGroupPanel'))
+      , checkboxInput(ns('isGroupByDate'), 'Is the data also grouped by data?', value=F)
     )
     
     if (input$selectedTabPanel == 'charts') {
@@ -224,9 +254,11 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
   output$dataGroupValueTree <- renderTree({ shinyTrees[[input$dataGroupField]] })
   
   pivotDf <- reactive({
-    dr <- data[data$key %in% df()$key,]
+    library(data.table)
+    dat <- setorderv(data, cols = c("date","citekey"), c(1,1))
+    dr <- dat[dat$key %in% df()$key,]
     dr <- dr[dr[[mainField]] %in% input$selectedFilterBy,]
-    columns <- c('key', mainField, input$selectedRefsFrom)
+    columns <- c('key', mainField, input$selectedRefsFrom, 'date')
     if (!is.null(numericField)) columns <- c(columns, numericField)
     
     ##
@@ -255,7 +287,11 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
     pt$addData(dr)
     pt$addRowDataGroups(mainField, addTotal=T)
     if (input$isDataGroup && !is.null(input$dataGroupField)) {
-      pt$addColumnDataGroups(input$dataGroupField)
+      #pt$addColumnDataGroups(input$dataGroupField, addTotal=F)
+      pt$addRowDataGroups(input$dataGroupField, addTotal=F)
+    }
+    if (input$isGroupByDate) {
+      pt$addRowDataGroups('date', addTotal=F)
     }
     pt$defineCalculation(calculationName="refs", summariseExpression=refsExpression)
     if (is.null(numericField)) {
@@ -269,16 +305,20 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
     }
     pt$evaluatePivot()
     
-    dr <- as.data.frame(pt$asMatrix()[seq(ifelse(input$isDataGroup,3,2), nrow(pt$asMatrix())),])
-    colnames(dr) <- pt$asMatrix()[1,]
-    if (input$isDataGroup) {
-      colnames(dr) <- paste(colnames(dr), pt$asMatrix()[2,])
-    }
+    toReturn <- as.data.frame(pt$asMatrix())
+    colnames(toReturn) <- toReturn[1,]
+    toReturn[seq(2,nrow(toReturn)),]
+    
+    #dr <- as.data.frame(pt$asMatrix()[seq(ifelse(input$isDataGroup,3,2), nrow(pt$asMatrix())),])
+    #colnames(dr) <- pt$asMatrix()[1,]
+    #if (input$isDataGroup) {
+    #  colnames(dr) <- paste(colnames(dr), pt$asMatrix()[2,])
+    #}
     
     ##
-    do.call(rbind, lapply(c(input$selectedFilterBy, 'Total'), FUN = function(x) {
-      rbind(dr[dr[[1]] == x,])
-    }))
+    #do.call(rbind, lapply(c(input$selectedFilterBy, 'Total'), FUN = function(x) {
+    #  rbind(dr[dr[[1]] == x,])
+    #}))
   })
   
   output$pivotDT <- DT::renderDataTable({
