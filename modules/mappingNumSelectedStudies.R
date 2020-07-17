@@ -135,6 +135,17 @@ mappingNumSelectedStudiesMD <- function(input, output, session, data, mainField,
       }
     }
     
+    ##
+    if (input$isAvoidDuplicate) {
+      td <- data.frame()
+      included_keys <- c()
+      for (value in input$duplicateSort) {
+        idx <- which(dr[[mainField]] == value & !(dr$key %in% included_keys))
+        td <- rbind(dr[idx,], td); included_keys <- c(dr$key[idx], included_keys)
+      }
+      dr <- td
+    }
+    
     unique(dr[,columns])
   })
   
@@ -197,14 +208,14 @@ mappingNumSelectedStudiesMD <- function(input, output, session, data, mainField,
     #  )
     #}
     
-    if (input$selectedTabPanel != 'data') {
+    #if (input$selectedTabPanel != 'data') {
       vlayout <- verticalLayout(
         selectInput(ns("selectedRefsFrom"), "Use 'refs' as", choices=colnames(data), selected='citekey')
         , checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
         , uiOutput(ns('avoidDuplicatePanel'))
         , vlayout
       )
-    }
+    #}
     
     
     if (!is.null(numericField) && input$selectedTabPanel != 'data') {

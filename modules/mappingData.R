@@ -109,6 +109,18 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
       if (length(input$dataFilterValue) > 0)
         dr <- dr[dr[[input$dataFilterField]] %in% input$dataFilterValue,]
     }
+    
+    ##
+    if (input$isAvoidDuplicate) {
+      td <- data.frame()
+      included_keys <- c()
+      for (value in input$duplicateSort) {
+        idx <- which(dr[[mainField]] == value & !(dr$key %in% included_keys))
+        td <- rbind(dr[idx,], td); included_keys <- c(dr$key[idx], included_keys)
+      }
+      dr <- td
+    }
+    
     unique(dr[,columns])
   })
   
@@ -125,22 +137,23 @@ mappingDataMD <- function(input, output, session, data, mainField, shinyTrees = 
       , uiOutput(ns('dataFilterPanel'))
     )
     
-    if (input$selectedTabPanel == 'charts') {
-      vlayout <- verticalLayout(
-        checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
-        , uiOutput(ns('avoidDuplicatePanel'))
-        , vlayout
-      )
-    }
+    #if (input$selectedTabPanel == 'charts') {
+    #  vlayout <- verticalLayout(
+    #    checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
+    #    , uiOutput(ns('avoidDuplicatePanel'))
+    #    , vlayout
+    #  )
+    #}
     
-    if (input$selectedTabPanel == 'pivot' || input$selectedTabPanel == 'latex') {
+    #if (input$selectedTabPanel == 'pivot' || input$selectedTabPanel == 'latex') {
       vlayout <- verticalLayout(
         selectInput(ns("selectedRefsFrom"), "Use 'refs' as", choices=colnames(data), selected='citekey')
         , checkboxInput(ns('isAvoidDuplicate'), "Are the classification avoid duplicates?", value=F)
         , uiOutput(ns('avoidDuplicatePanel'))
         , vlayout
       )
-    }
+    #}
+    
     if (!is.null(numericField)) {
       exp_choices <- c('median(#, na.rm=T)','mean(#, na.rm=T)','min(#, na.rm=T)','max(#, na.rm=T)','sum(#, na.rm=T)')
       vlayout <- verticalLayout(
